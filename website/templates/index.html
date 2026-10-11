@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimation immobilière redfile</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="cadre header__inner">
+            <a class="logo" href="/">
+                <img src="/redfile_logo.png" alt="redfile">
+            </a>
+            <nav>
+                <ul class="nav">
+                    <li><a class="nav__lien actif" href="/">Accueil</a></li>
+                    <li><a class="nav__lien" href="/#tarifs">Tarifs</a></li>
+                    <li><a class="bouton" href="/estimation">J'estime mon bien <span class="fleche" aria-hidden="true"></span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="cadre">
+                <div class="hero__carte">
+                    <h1>Estimez votre bien avec redfile</h1>
+                    <p>Notre différence ? </p>
+                    <p>Chez redfile, nous ne vous donnerons pas un ordre de grandeur, mais un prix le plus proche possible du marché local, calculé par notre modèle redfile et en fonction des caractéristiques propres de votre bien.</p>
+                    <p class="hero__tarif">{{ prix }} € TTC par estimation. L'accompagnement expert n'est facturé que si la vente aboutit.</p>
+                    <a class="bouton bouton--clair" href="/estimation">J'estime mon bien <span class="fleche" aria-hidden="true"></span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="cadre">
+                <h2>Ce que l'estimation prend en compte</h2>
+                <p class="chapeau">Le calcul du prix est fait en deux étapes : d'abord le marché de la ville, puis les caractéristiques précises du logement.</p>
+                <div class="piliers">
+                    <article class="pilier">
+                        <div class="icone" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>
+                        </div>
+                        <h3>La surface et la ville</h3>
+                        <p>Un mètre carré à Paris ne vaut pas un mètre carré à Marseille. C'est le socle du prix.</p>
+                    </article>
+                    <article class="pilier">
+                        <div class="icone" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M7 8h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/></svg>
+                        </div>
+                        <h3>Des ajustements importants</h3>
+                        <p>État, DPE, année, garage, étage ou distance au centre corrigent le prix, sans le remplacer.</p>
+                    </article>
+                    <article class="pilier">
+                        <div class="icone" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>
+                        </div>
+                        <h3>Dès que l'estimation est réglée</h3>
+                        <p>{{ prix }} € TTC, puis le prix du bien. Pas de compte, et pas de rendez-vous pour cette étape.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="cadre duo">
+                <div class="duo__photo">
+                    <img src="/images/marseille.jpg" alt="Maison aux volets verts dans un quartier calme">
+                </div>
+                <div class="duo__texte">
+                    <h2>Pourquoi estimer avec redfile</h2>
+                    <p>Beaucoup d'outils donnent le prix moyen de la rue. Deux appartements voisins y valent la même chose. Redfile part de votre logement : l'état, le DPE ou l'étage changent le montant.</p>
+                    <p>Vous pouvez revenir plus tard, après des travaux ou un nouveau DPE, et relancer une estimation. Chaque passage est facturé {{ prix }} € TTC. Vous voyez ce que le bien a gagné avant d'en parler à un acheteur.</p>
+                    <p>Le rendez-vous en agence commence alors avec un prix que vous savez justifier, au lieu d'une fourchette d'estimation approximative, désavantageuse pour vous.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="cadre duo duo--inverse">
+                <div class="duo__photo">
+                    <img src="/images/lille.jpg" alt="Maison de ville en brique à Lille">
+                </div>
+                <div class="duo__texte">
+                    <h2>Sept villes, des marchés distincts</h2>
+                    <p>redfile ne couvre pas toute la France. Le modèle s'appuie sur Paris, Lyon, Bordeaux, Rennes, Strasbourg, Lille et Marseille, des marchés où les ventes sont assez nombreuses pour comparer un bien à d'autres qui lui ressemblent.</p>
+                    <p>Étendre l'outil à des centaines de petites communes ajouterait du bruit : peu de références, des prix qui sautent d'une rue à l'autre, et une estimation moins fiable. Rester sur ces sept villes rend chaque montant plus solide.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="tarifs">
+            <div class="cadre">
+                <h2>Deux temps, un prix clair</h2>
+                <p class="chapeau">Vous payez l'estimation. L'accompagnement n'est facturé que si la vente aboutit.</p>
+                <div class="offres">
+                    <article class="offre offre--appel">
+                        <p class="offre__nom">Estimation</p>
+                        <p class="offre__montant">{{ prix }} € <span>TTC par estimation</span></p>
+                        <p>Activation du moteur : un prix précis pour votre bien.</p>
+                        <a class="bouton bouton--clair" href="/estimation">J'estime mon bien <span class="fleche" aria-hidden="true"></span></a>
+                    </article>
+                    <article class="offre">
+                        <p class="offre__nom">Accompagnement expert, facultatif</p>
+                        <p class="offre__montant">Commission <span>uniquement si le bien est vendu</span></p>
+                        <p>Un rendez-vous pour préparer la négociation. Rien n'est dû si la vente n'aboutit pas. Le pourcentage dépend du bien et du contrat.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="cadre">
+                <h2>Ils ont commencé par le formulaire... et ont adoré !</h2>
+                <p class="chapeau">Ils avaient déjà un prix à défendre avant d'appeler l'agence.</p>
+                <div class="avis">
+                    <article>
+                        <p>L'estimation redfile m'a permis de justifier mon prix de vente.</p>
+                        <span>Inès, Lyon</span>
+                    </article>
+                    <article>
+                        <p>Je voulais savoir si mon prix de vente tenait la route, sans attendre une semaine.</p>
+                        <span>Marc, Paris</span>
+                    </article>
+                    <article>
+                        <p>Nous avons estimé l'appartement et conclu une vente le soir même.</p>
+                        <span>Hugo, Lille</span>
+                    </article>
+                </div>
+                <p class="centre">
+                    <a class="bouton" href="/estimation">J'estime mon bien <span class="fleche" aria-hidden="true"></span></a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="cadre">
+            <p>redfile, estimation immobilière</p>
+            <p>Site fictif à usage pédagogique</p>
+        </div>
+    </footer>
+</body>
+</html>

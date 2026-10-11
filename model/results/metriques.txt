@@ -1,0 +1,11 @@
+Metriques sur le jeu de test (20 %, random_state=42)
+
+Regression lineaire
+MAE  : 42516 euros
+RMSE : 70439 euros
+R2   : 0.908
+
+XGBoost
+MAE  : 28756 euros
+RMSE : 40990 euros
+R2   : 0.969

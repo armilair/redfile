@@ -4,6 +4,8 @@ import joblib
 import pandas as pd
 from flask import Flask, jsonify, render_template, request, send_from_directory
 
+from redfilebot.appeler import repondre as repondre_agent
+
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.join(DOSSIER, "website")
 
@@ -146,6 +148,19 @@ def page_estimation():
 @app.route("/redfile_logo.png")
 def logo():
     return send_from_directory(os.path.join(SITE, "static", "images"), "redfile_logo.png")
+
+
+@app.route("/parler", methods=["POST"])
+def parler():
+    donnees = request.get_json(silent=True)
+    if not isinstance(donnees, dict):
+        return jsonify({"erreur": "Corps JSON attendu."}), 400
+    if not str(donnees.get("message") or "").strip() and not str(donnees.get("evenement") or "").strip():
+        return jsonify({"erreur": "Message vide."}), 400
+    try:
+        return jsonify(repondre_agent(donnees))
+    except Exception as erreur:
+        return jsonify({"erreur": str(erreur)}), 502
 
 
 @app.route("/estimate", methods=["POST"])

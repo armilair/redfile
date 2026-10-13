@@ -6,11 +6,11 @@
     <title>J'estime mon bien avec redfile</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body class="page-chat">
     <header class="header">
         <div class="cadre header__inner">
             <a class="logo" href="/">
-                <img src="/redfile_logo.png" alt="Redfile">
+                <img src="/redfile_logo.png" alt="redfile">
             </a>
             <nav>
                 <ul class="nav">
@@ -22,122 +22,44 @@
         </div>
     </header>
 
-    <main>
-        <section class="page-titre">
-            <div class="cadre">
-                <h1>Estimez votre bien</h1>
-                <p>L'estimation coûte {{ prix }} € TTC. Décrivez le bien tel qu'il est : le séjour compte dans les pièces.</p>
+    <main class="studio studio--vide" id="studio">
+        <section class="besoins" aria-labelledby="besoins-titre">
+            <div class="besoins__carte">
+                <h2 id="besoins-titre">Votre estimation, simplement</h2>
+                <p class="besoins__tarif">{{ prix }} € TTC. Le prix du bien s'affiche après votre accord et le règlement.</p>
             </div>
         </section>
 
-        <section class="cadre estimation-layout">
-            <form class="carte estimation__form" id="estimationForm" autocomplete="off">
-                <h2 class="form__bloc form__pleine">Le bien</h2>
-                <div class="form__groupe">
-                    <label for="type_bien">Type de bien</label>
-                    <select id="type_bien" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="appartement">Appartement</option>
-                        <option value="maison">Maison</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label for="ville">Ville</label>
-                    <select id="ville" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="Paris">Paris</option>
-                        <option value="Lyon">Lyon</option>
-                        <option value="Bordeaux">Bordeaux</option>
-                        <option value="Rennes">Rennes</option>
-                        <option value="Strasbourg">Strasbourg</option>
-                        <option value="Lille">Lille</option>
-                        <option value="Marseille">Marseille</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label for="surface">Surface (m²)</label>
-                    <input type="number" id="surface" required min="15" max="250" step="0.1">
-                </div>
-                <div class="form__groupe">
-                    <label for="distance_centre">Distance au centre (km)</label>
-                    <input type="number" id="distance_centre" required min="0" max="30" step="0.1">
-                </div>
+        <div class="studio__fil" id="fil" role="log" aria-live="polite" aria-label="Conversation"></div>
 
-                <h2 class="form__bloc form__pleine">La distribution</h2>
-                <div class="form__groupe">
-                    <label for="nb_pieces">Nombre de pièces</label>
-                    <input type="number" id="nb_pieces" required min="1" max="12" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="nb_chambres">Nombre de chambres</label>
-                    <input type="number" id="nb_chambres" required min="1" max="10" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="nb_salles_de_bain">Salles de bain</label>
-                    <input type="number" id="nb_salles_de_bain" required min="1" max="5" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="etage">Étage</label>
-                    <input type="number" id="etage" required min="0" max="20" step="1" value="0">
-                </div>
+        <div class="studio__bloc">
+            <h1 class="accroche" id="accroche">Alors ? Dites-moi tout.</h1>
+            <p class="progression" id="progression" hidden></p>
 
-                <h2 class="form__bloc form__pleine">L'état du logement</h2>
-                <div class="form__groupe">
-                    <label for="annee_construction">Année de construction</label>
-                    <input type="number" id="annee_construction" required min="1900" max="2025" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="etat">État</label>
-                    <select id="etat" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="mauvais">Mauvais</option>
-                        <option value="moyen">Moyen</option>
-                        <option value="bon">Bon</option>
-                        <option value="excellent">Excellent</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label for="dpe">Classe DPE</label>
-                    <select id="dpe" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="G">G</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label id="labelEquipements">Équipements</label>
-                    <div class="liste" id="equipementsListe">
-                        <button type="button" class="liste__face" id="equipementsFace">Aucun équipement</button>
-                        <ul class="liste__menu" hidden>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="garage"> Garage</label></li>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="ascenseur"> Ascenseur</label></li>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="balcon_terrasse"> Balcon ou terrasse</label></li>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="cave"> Cave</label></li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="dock" id="dock">
+            <div class="menu menu--mode" id="menuMode" role="menu" hidden>
+                <p class="menu__titre">Assistant</p>
+                <p class="mode__ligne"><span class="mode__pastille" aria-hidden="true"></span>Estimation de votre bien</p>
+                <p class="menu__intro">Le prix affiché est celui du modèle, une fois que vous avez confirmé et réglé.</p>
+            </div>
+            <div class="menu menu--arobase" id="menuArobase" role="listbox" hidden></div>
 
-                <button type="submit" class="bouton estimation__submit" id="bouton">Passer au paiement <span class="fleche" aria-hidden="true"></span></button>
-                <div id="paiement" class="paiement form__pleine" hidden>
-                    <p class="paiement__titre">Régler cette estimation</p>
-                    <p class="paiement__montant">{{ prix }} € TTC</p>
-                    <p>Le calcul démarre après le règlement. Paiement simulé : aucun prélèvement réel.</p>
-                    <button type="button" class="bouton" id="confirmerPaiement">Payer et estimer <span class="fleche" aria-hidden="true"></span></button>
-                </div>
-                <div id="suivi" class="pensee form__pleine" hidden>
-                    <p class="pensee__titre">Notre petit robot estime votre bien…</p>
-                    <div id="penseeFil" class="pensee__fil"></div>
-                </div>
-                <p id="resultat" class="resultat form__pleine" hidden></p>
-                <p id="suite" class="suite form__pleine" hidden>Accompagnement expert, en option : un rendez-vous pour préparer la négociation. Cet accompagnement n'est facturé que si la vente aboutit, selon le bien et le contrat.</p>
-                <p id="erreur" class="erreur form__pleine" hidden></p>
+            <form class="compositeur" id="compositeur" autocomplete="off">
+                <textarea id="saisie" rows="1" placeholder="Racontez-moi votre bien…" aria-label="Votre message"></textarea>
+                <button type="button" class="mode-btn" id="mode" aria-label="Mode de l'assistant" aria-controls="menuMode" aria-expanded="false" aria-haspopup="menu">
+                    <span>redfile</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <button type="button" class="icone-btn" id="micro" aria-label="Dicter" aria-pressed="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>
+                </button>
+                <button type="submit" class="envoi-rond" id="envoi" aria-label="Envoyer" hidden>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+                </button>
             </form>
-        </section>
+            </div>
+            <p class="dictee" id="dictee" hidden></p>
+        </div>
     </main>
 
     <footer class="footer">
@@ -148,233 +70,925 @@
     </footer>
 
     <script>
-        const form = document.getElementById("estimationForm");
-        const resultat = document.getElementById("resultat");
-        const suite = document.getElementById("suite");
-        const erreur = document.getElementById("erreur");
-        const bouton = document.getElementById("bouton");
-        const paiement = document.getElementById("paiement");
-        const confirmerPaiement = document.getElementById("confirmerPaiement");
-        const suivi = document.getElementById("suivi");
-        const penseeFil = document.getElementById("penseeFil");
-        const equipementsFace = document.getElementById("equipementsFace");
-        const equipementsListe = document.getElementById("equipementsListe");
+        // Tarif du service (pas le prix du bien), fourni par le serveur
+        const TARIF = "{{ prix }}";
 
-        function ouiNon(id) {
-            return document.getElementById(id).checked ? "oui" : "non";
+        // Les 15 caractéristiques, dans l'ordre de data/house_pred.csv. Ni plus, ni moins.
+        const CHAMPS = [
+            { cle: "surface", libelle: "Surface", aide: "entre 15 et 250 m²", question: "Quelle est la surface, en m² ?" },
+            { cle: "type_bien", libelle: "Type de bien", aide: "appartement ou maison", question: "C'est un appartement ou une maison ?" },
+            { cle: "nb_pieces", libelle: "Pièces", aide: "séjour compris, entre 1 et 12", question: "Combien de pièces, séjour compris ?" },
+            { cle: "nb_chambres", libelle: "Chambres", aide: "entre 1 et 10", question: "Et combien de chambres ?" },
+            { cle: "nb_salles_de_bain", libelle: "Salles de bain", aide: "entre 1 et 5", question: "Combien de salles de bain ?" },
+            { cle: "etage", libelle: "Étage", aide: "0 au rez-de-chaussée, jusqu'à 20", question: "À quel étage ? Le rez-de-chaussée, c'est 0." },
+            { cle: "annee_construction", libelle: "Année de construction", aide: "entre 1900 et 2025", question: "En quelle année a-t-il été construit ?" },
+            { cle: "ville", libelle: "Ville", aide: "Paris, Lyon, Lille, Marseille, Rennes, Bordeaux ou Strasbourg", question: "Dans quelle ville se trouve-t-il ?" },
+            { cle: "etat", libelle: "État", aide: "mauvais, moyen, bon ou excellent", question: "Comment le trouvez-vous : mauvais, moyen, bon ou excellent ?" },
+            { cle: "dpe", libelle: "DPE", aide: "une lettre de A à G", question: "Quelle est la classe DPE, de A à G ?" },
+            { cle: "garage", libelle: "Garage", aide: "oui ou non", question: "Y a-t-il un garage ?" },
+            { cle: "ascenseur", libelle: "Ascenseur", aide: "oui ou non", question: "Y a-t-il un ascenseur ?" },
+            { cle: "balcon_terrasse", libelle: "Balcon ou terrasse", aide: "oui ou non", question: "Y a-t-il un balcon ou une terrasse ?" },
+            { cle: "cave", libelle: "Cave", aide: "oui ou non", question: "Y a-t-il une cave ?" },
+            { cle: "distance_centre", libelle: "Distance au centre", aide: "en km, entre 0 et 30", question: "À quelle distance du centre-ville ? En kilomètres, ou en mètres si c'est tout près." },
+        ];
+        const PAR_CLE = Object.fromEntries(CHAMPS.map(function (c) { return [c.cle, c]; }));
+
+        const VILLES = ["Paris", "Lyon", "Lille", "Marseille", "Rennes", "Bordeaux", "Strasbourg"];
+        const ETATS = ["mauvais", "moyen", "bon", "excellent"];
+        const DPE = ["A", "B", "C", "D", "E", "F", "G"];
+
+        // Bornes de saisie (mêmes plages que valider()), pour relancer tout de suite le client
+        const BORNES = {
+            surface: [15, 250, false, "La surface doit être comprise entre 15 et 250 m²."],
+            nb_pieces: [1, 12, true, "Le nombre de pièces doit être compris entre 1 et 12."],
+            nb_chambres: [1, 10, true, "Le nombre de chambres doit être compris entre 1 et 10."],
+            nb_salles_de_bain: [1, 5, true, "Le nombre de salles de bain doit être compris entre 1 et 5."],
+            etage: [0, 20, true, "L'étage doit être compris entre 0 et 20."],
+            annee_construction: [1900, 2025, true, "L'année de construction doit être comprise entre 1900 et 2025."],
+            distance_centre: [0, 30, false, "La distance au centre doit être comprise entre 0 et 30 km."],
+        };
+
+        const MOTS_NOMBRES = { un: 1, une: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, huit: 8, neuf: 9, dix: 10 };
+        const NOMBRE = "(\\d+|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)";
+
+        // La fiche : une information non dite reste null
+        const fiche = {};
+        CHAMPS.forEach(function (c) { fiche[c.cle] = null; });
+
+        let etape = "collecte";
+        let prixBien = null;
+        let refusExpert = 0;
+        let ficheConfirmee = false;
+        let historique = [];
+        let cleDemandee = null;
+
+        const fil = document.getElementById("fil");
+        const saisie = document.getElementById("saisie");
+        const envoi = document.getElementById("envoi");
+        const studio = document.getElementById("studio");
+        const dock = document.getElementById("dock");
+        const compositeur = document.getElementById("compositeur");
+        const modeBtn = document.getElementById("mode");
+        const micro = document.getElementById("micro");
+        const menuMode = document.getElementById("menuMode");
+        const menuArobase = document.getElementById("menuArobase");
+        const progression = document.getElementById("progression");
+        const dictee = document.getElementById("dictee");
+        let tokenArobase = null;
+        let baseDictee = "";
+        let ecoute = false;
+
+        // ---------- Utilitaires de texte ----------
+
+        // Minuscules sans accents, pour comparer sans se soucier de la saisie
+        function normaliser(texte) {
+            return texte
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[̀-ͯ]/g, "")
+                .replace(/[’`]/g, "'");
         }
 
-        function fermerListes() {
-            document.querySelectorAll(".liste").forEach(function (liste) {
-                liste.classList.remove("liste--ouvert");
-                liste.querySelector(".liste__menu").hidden = true;
-            });
+        function versNombre(brut) {
+            const mot = brut.toLowerCase();
+            if (MOTS_NOMBRES[mot] !== undefined) return MOTS_NOMBRES[mot];
+            return parseFloat(brut.replace(",", "."));
         }
 
-        document.querySelectorAll("select").forEach(function (select) {
-            const enveloppe = document.createElement("div");
-            enveloppe.className = "liste";
-            select.parentNode.insertBefore(enveloppe, select);
-            enveloppe.appendChild(select);
-            select.classList.add("liste__source");
-
-            const face = document.createElement("button");
-            face.type = "button";
-            face.className = "liste__face";
-            face.textContent = "Sélectionnez";
-
-            const menu = document.createElement("ul");
-            menu.className = "liste__menu";
-            menu.hidden = true;
-
-            Array.from(select.options).forEach(function (option) {
-                if (!option.value) return;
-                const ligne = document.createElement("li");
-                const choix = document.createElement("button");
-                choix.type = "button";
-                choix.className = "liste__option";
-                choix.textContent = option.text;
-                choix.addEventListener("click", function () {
-                    select.value = option.value;
-                    face.textContent = option.text;
-                    enveloppe.classList.remove("liste--erreur");
-                    menu.querySelectorAll(".liste__option").forEach(function (el) {
-                        el.classList.toggle("liste__option--choisi", el === choix);
-                    });
-                    fermerListes();
-                });
-                ligne.appendChild(choix);
-                menu.appendChild(ligne);
-            });
-
-            face.addEventListener("click", function () {
-                const etaitOuvert = enveloppe.classList.contains("liste--ouvert");
-                fermerListes();
-                if (!etaitOuvert) {
-                    menu.hidden = false;
-                    enveloppe.classList.add("liste--ouvert");
-                }
-            });
-
-            enveloppe.appendChild(face);
-            enveloppe.appendChild(menu);
-        });
-
-        equipementsFace.addEventListener("click", function () {
-            const menu = equipementsListe.querySelector(".liste__menu");
-            const etaitOuvert = equipementsListe.classList.contains("liste--ouvert");
-            fermerListes();
-            if (!etaitOuvert) {
-                menu.hidden = false;
-                equipementsListe.classList.add("liste--ouvert");
-            }
-        });
-
-        function majEquipements() {
-            const coches = [];
-            if (document.getElementById("garage").checked) coches.push("Garage");
-            if (document.getElementById("ascenseur").checked) coches.push("Ascenseur");
-            if (document.getElementById("balcon_terrasse").checked) coches.push("Balcon ou terrasse");
-            if (document.getElementById("cave").checked) coches.push("Cave");
-            equipementsFace.textContent = coches.length ? coches.join(", ") : "Aucun équipement";
-        }
-
-        equipementsListe.querySelectorAll("input").forEach(function (caseACocher) {
-            caseACocher.addEventListener("change", majEquipements);
-        });
-
-        document.addEventListener("click", function (event) {
-            if (!event.target.closest(".liste")) fermerListes();
-        });
-
-        function attendre(ms) {
-            return new Promise(function (resolve) {
-                setTimeout(resolve, ms);
-            });
-        }
-
-        async function ecrireLigne(texte) {
-            const ligne = document.createElement("p");
-            ligne.className = "pensee__ligne";
-            penseeFil.appendChild(ligne);
-            for (let i = 0; i < texte.length; i += 1) {
-                ligne.textContent += texte[i];
-                await attendre(26);
-            }
-            await attendre(320);
-        }
-
-        async function jouerPhases() {
-            const ville = document.getElementById("ville").value;
-            const phrases = [
-                "Je récupère les informations du formulaire.",
-                "Je cherche des biens comparables à " + ville + ".",
-                "Je pars du prix au mètre carré, puis de la surface.",
-                "J'ajuste avec l'état, le DPE et les équipements.",
-                "Je prépare le montant."
-            ];
-            penseeFil.textContent = "";
-            suivi.hidden = false;
-            for (let i = 0; i < phrases.length; i += 1) {
-                await ecrireLigne(phrases[i]);
-            }
-        }
-
-        function formulairePret() {
-            fermerListes();
-            let valide = true;
-            document.querySelectorAll("select").forEach(function (select) {
-                const enveloppe = select.closest(".liste");
-                const vide = !select.value;
-                enveloppe.classList.toggle("liste--erreur", vide);
-                if (vide) valide = false;
-            });
-            if (!valide || !form.checkValidity()) {
-                form.reportValidity();
-                return false;
-            }
+        function dansBornes(cle, valeur) {
+            const b = BORNES[cle];
+            if (Number.isNaN(valeur)) return false;
+            if (valeur < b[0] || valeur > b[1]) return false;
+            if (b[2] && !Number.isInteger(valeur)) return false;
             return true;
         }
 
-        function lireDonnees() {
-            return {
-                surface: Number(document.getElementById("surface").value),
-                type_bien: document.getElementById("type_bien").value,
-                nb_pieces: Number(document.getElementById("nb_pieces").value),
-                nb_chambres: Number(document.getElementById("nb_chambres").value),
-                nb_salles_de_bain: Number(document.getElementById("nb_salles_de_bain").value),
-                etage: Number(document.getElementById("etage").value),
-                annee_construction: Number(document.getElementById("annee_construction").value),
-                ville: document.getElementById("ville").value,
-                etat: document.getElementById("etat").value,
-                dpe: document.getElementById("dpe").value,
-                garage: ouiNon("garage"),
-                ascenseur: ouiNon("ascenseur"),
-                balcon_terrasse: ouiNon("balcon_terrasse"),
-                cave: ouiNon("cave"),
-                distance_centre: Number(document.getElementById("distance_centre").value),
-                paiement: true,
-            };
-        }
+        // ---------- Extraction depuis une description libre ----------
+        // Chaque extracteur renvoie une valeur ou undefined. Rien n'est jamais deviné.
 
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-            if (!formulairePret()) return;
-            resultat.hidden = true;
-            suite.hidden = true;
-            erreur.hidden = true;
-            suivi.hidden = true;
-            paiement.hidden = false;
-        });
+        function extraire(brut) {
+            const t = normaliser(brut);
+            const trouve = {};
 
-        confirmerPaiement.addEventListener("click", async function () {
-            if (!formulairePret()) {
-                paiement.hidden = true;
-                return;
+            // Surface : « 53,1 m² », « 53 m2 », « 53 mètres carrés »
+            let m = t.match(/(\d+(?:[.,]\d+)?)\s*(?:m²|m2|metres?\s+carres?)/);
+            if (m) trouve.surface = parseFloat(m[1].replace(",", "."));
+
+            // Type : T1, T2, T3… sont des appartements, le nombre est le nombre de pièces
+            m = t.match(/\bt\s?(\d{1,2})\b/);
+            if (m) {
+                trouve.type_bien = "appartement";
+                trouve.nb_pieces = parseInt(m[1], 10);
+            }
+            if (/\b(appartement|appart)\b/.test(t)) trouve.type_bien = "appartement";
+            if (/\b(maison|pavillon|villa)\b/.test(t)) trouve.type_bien = "maison";
+
+            m = t.match(new RegExp("\\b" + NOMBRE + "\\s*pieces?\\b"));
+            if (m) trouve.nb_pieces = versNombre(m[1]);
+
+            // Chambres : jamais déduites du nombre de pièces
+            m = t.match(new RegExp("\\b" + NOMBRE + "\\s*chambres?\\b"));
+            if (m) trouve.nb_chambres = versNombre(m[1]);
+
+            m = t.match(new RegExp("\\b" + NOMBRE + "\\s*salles?\\s+de\\s+bains?\\b"));
+            if (m) trouve.nb_salles_de_bain = versNombre(m[1]);
+
+            // Étage : « au 6e », « 6ème étage », « rez-de-chaussée »
+            if (/rez[- ]de[- ]chaussee|\brdc\b/.test(t)) {
+                trouve.etage = 0;
+            } else {
+                m = t.match(/\bau\s+(\d{1,2})\s*(?:e|eme|er|ere)\b/) ||
+                    t.match(/\b(\d{1,2})\s*(?:e|eme|er|ere)?\s+etage\b/) ||
+                    t.match(/\betage\s*(\d{1,2})\b/);
+                if (m) trouve.etage = parseInt(m[1], 10);
             }
 
-            paiement.hidden = true;
-            resultat.hidden = true;
-            suite.hidden = true;
-            erreur.hidden = true;
-            bouton.disabled = true;
-            confirmerPaiement.disabled = true;
+            // Année : seulement si le texte parle de construction
+            m = t.match(/(?:construit|construite|batie?|datant|date|annee(?:\s+de\s+construction)?)\D{0,20}?\b(19\d{2}|20[0-2]\d)\b/);
+            if (m) trouve.annee_construction = parseInt(m[1], 10);
 
-            const donnees = lireDonnees();
-
-            const calcul = fetch("/estimate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(donnees),
-            }).then(function (reponse) {
-                return reponse.json().then(function (corps) {
-                    return { ok: reponse.ok, corps: corps };
-                });
+            VILLES.forEach(function (ville) {
+                if (new RegExp("\\b" + normaliser(ville) + "\\b").test(t)) trouve.ville = ville;
             });
 
+            m = t.match(/\betat\s+(?:general\s+)?(mauvais|moyen|bon|excellent)\b/) ||
+                t.match(/\b(mauvais|moyen|bon|excellent)\s+etat\b/);
+            if (m) trouve.etat = m[1];
+
+            m = t.match(/\bdpe\s*(?:de\s+|classe\s+|en\s+)?:?\s*([a-g])\b/) ||
+                t.match(/\bclasse\s+(?:energie\s+|energetique\s+)?([a-g])\b/);
+            if (m) trouve.dpe = m[1].toUpperCase();
+
+            // Équipements : « sans », « pas de », « aucun », « ni » donnent non ; une simple mention donne oui
+            Object.assign(trouve, extraireEquipements(t));
+
+            // Distance : « 3,9 km du centre », « 500 m du centre »
+            m = t.match(/(\d+(?:[.,]\d+)?)\s*(km|kilometres?|metres?|m)\b\s*(?:du|de|d')?\s*(?:centre|centre-ville)/);
+            if (m) {
+                const nombre = parseFloat(m[1].replace(",", "."));
+                trouve.distance_centre = m[2] === "km" || m[2].startsWith("kilo") ? nombre : nombre / 1000;
+            }
+
+            return trouve;
+        }
+
+        const EQUIPEMENTS = {
+            garage: /\bgarages?\b/,
+            ascenseur: /\bascenseurs?\b/,
+            balcon_terrasse: /\b(balcons?|terrasses?)\b/,
+            cave: /\bcaves?\b/,
+        };
+
+        function extraireEquipements(t) {
+            const trouve = {};
+            // On découpe en propositions, puis on regarde ce qui précède chaque mot
+            t.split(/[.;!?\n]|,/).forEach(function (proposition) {
+                Object.keys(EQUIPEMENTS).forEach(function (cle) {
+                    const m = proposition.match(EQUIPEMENTS[cle]);
+                    if (!m) return;
+                    // Seul ce qui suit le dernier « avec / mais / et » compte pour ce mot
+                    const avant = proposition.slice(0, m.index).split(/\b(?:avec|mais|et)\b/).pop();
+                    trouve[cle] = /\b(sans|pas|aucun|aucune|ni|non)\b/.test(avant) ? "non" : "oui";
+                });
+            });
+            return trouve;
+        }
+
+        // ---------- Lecture d'une réponse à une question précise ----------
+
+        // Renvoie { valeur } ou { erreur } ou null si rien de compris
+        function lireReponse(cle, brut) {
+            const t = normaliser(brut).trim();
+            if (!t) return null;
+
+            if (BORNES[cle]) {
+                let valeur;
+                if (cle === "etage" && /rez[- ]de[- ]chaussee|\brdc\b/.test(t)) {
+                    valeur = 0;
+                } else if (cle === "distance_centre") {
+                    const m = t.match(/(\d+(?:[.,]\d+)?)\s*(km|kilometres?|metres?|m)?\b/);
+                    if (!m) return null;
+                    valeur = parseFloat(m[1].replace(",", "."));
+                    if (m[2] && !m[2].startsWith("k")) valeur = valeur / 1000;
+                } else {
+                    const m = t.match(new RegExp("\\b(\\d+(?:[.,]\\d+)?|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)\\b"));
+                    if (!m) return null;
+                    valeur = versNombre(m[1]);
+                }
+                if (!dansBornes(cle, valeur)) return { erreur: BORNES[cle][3] };
+                return { valeur: valeur };
+            }
+
+            if (cle === "type_bien") {
+                if (/\b(maison|pavillon|villa)\b/.test(t)) return { valeur: "maison" };
+                if (/\b(appartement|appart)\b/.test(t)) return { valeur: "appartement" };
+                return null;
+            }
+            if (cle === "ville") {
+                const ville = VILLES.find(function (v) { return new RegExp("\\b" + normaliser(v) + "\\b").test(t); });
+                return ville ? { valeur: ville } : { erreur: "Cette ville n'est pas dans la liste : " + VILLES.join(", ") + "." };
+            }
+            if (cle === "etat") {
+                const etat = ETATS.find(function (e) { return new RegExp("\\b" + e + "\\b").test(t); });
+                return etat ? { valeur: etat } : null;
+            }
+            if (cle === "dpe") {
+                const m = t.match(/^(?:dpe\s*|classe\s*)?([a-g])$/) || t.match(/\b(?:dpe|classe)\s*:?\s*([a-g])\b/);
+                return m ? { valeur: m[1].toUpperCase() } : null;
+            }
+            // Équipements
+            if (/^(non|no)\b|\b(sans|pas|aucun|aucune)\b/.test(t)) return { valeur: "non" };
+            if (/^(oui|ouais|yes)\b|\b(avec|il y a|j'en ai|possede|dispose)\b/.test(t)) return { valeur: "oui" };
+            return null;
+        }
+
+        // ---------- Mise à jour de la fiche ----------
+
+        // Remplit uniquement les champs encore à null. Renvoie les clés renseignées.
+        function appliquer(trouve) {
+            const remplis = [];
+            Object.keys(trouve).forEach(function (cle) {
+                if (fiche[cle] !== null || !(cle in fiche)) return;
+                if (BORNES[cle] && !dansBornes(cle, trouve[cle])) return;
+                fiche[cle] = trouve[cle];
+                remplis.push(cle);
+            });
+            appliquerConventions();
+            return remplis;
+        }
+
+        // Seule convention hors phrase : une maison est à l'étage 0, sans ascenseur
+        function appliquerConventions() {
+            if (fiche.type_bien === "maison") {
+                if (fiche.etage === null) fiche.etage = 0;
+                if (fiche.ascenseur === null) fiche.ascenseur = "non";
+            }
+        }
+
+        function champsManquants() {
+            return CHAMPS.filter(function (c) { return fiche[c.cle] === null; });
+        }
+
+        // ---------- Affichage du fil ----------
+
+        function defiler() {
+            fil.scrollTop = fil.scrollHeight;
+        }
+
+        function bulle(role, contenu) {
+            const ligne = document.createElement("div");
+            ligne.className = "msg msg--" + role;
+            const corps = document.createElement("div");
+            corps.className = "msg__bulle";
+            if (typeof contenu === "string") {
+                corps.textContent = contenu;
+                corps.classList.add("msg__bulle--texte");
+            } else {
+                corps.appendChild(contenu);
+            }
+            ligne.appendChild(corps);
+            fil.appendChild(ligne);
+            defiler();
+            return corps;
+        }
+
+        function ecrireTexte(corps, texte) {
+            const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (reduit || !texte) {
+                corps.textContent = texte || "";
+                defiler();
+                return Promise.resolve();
+            }
+            corps.classList.add("is-ecrit");
+            corps.textContent = "";
+            let index = 0;
+            return new Promise(function (resolve) {
+                function pas() {
+                    index += 1;
+                    corps.textContent = texte.slice(0, index);
+                    if (index % 3 === 0) defiler();
+                    if (index < texte.length) {
+                        window.setTimeout(pas, texte.charAt(index - 1) === " " ? 8 : 16);
+                    } else {
+                        corps.classList.remove("is-ecrit");
+                        defiler();
+                        resolve();
+                    }
+                }
+                pas();
+            });
+        }
+
+        function elt(balise, classe, texte) {
+            const e = document.createElement(balise);
+            if (classe) e.className = classe;
+            if (texte !== undefined) e.textContent = texte;
+            return e;
+        }
+
+        function retirerChoix() {
+            fil.querySelectorAll(".choix").forEach(function (c) { c.remove(); });
+        }
+
+        // Boutons de réponse rapide : valeur envoyée comme si le client l'avait écrite
+        function proposer(options, action) {
+            retirerChoix();
+            const zone = elt("div", "choix");
+            options.forEach(function (option) {
+                const bouton = elt("button", "choix__bouton", option.libelle);
+                bouton.type = "button";
+                bouton.addEventListener("click", function () {
+                    retirerChoix();
+                    action(option);
+                });
+                zone.appendChild(bouton);
+            });
+            fil.appendChild(zone);
+            defiler();
+        }
+
+        function frappe(actif) {
+            let indicateur = document.getElementById("frappe");
+            if (actif && !indicateur) {
+                indicateur = elt("div", "msg msg--assistant");
+                indicateur.id = "frappe";
+                const corps = elt("div", "msg__bulle frappe");
+                corps.setAttribute("aria-label", "Redfile écrit");
+                for (let i = 0; i < 3; i += 1) corps.appendChild(elt("span", "frappe__point"));
+                indicateur.appendChild(corps);
+                fil.appendChild(indicateur);
+                defiler();
+            } else if (!actif && indicateur) {
+                indicateur.remove();
+            }
+        }
+
+        function activerSaisie(actif, indice) {
+            saisie.disabled = !actif;
+            envoi.disabled = !actif;
+            micro.disabled = !actif;
+            modeBtn.disabled = !actif;
+            if (indice) saisie.placeholder = indice;
+            majBoutonEnvoi();
+            if (actif) saisie.focus();
+        }
+
+        // ---------- Écran d'accueil, menus, passage au fil ----------
+
+        function fermerMenus() {
+            menuMode.hidden = true;
+            menuArobase.hidden = true;
+            modeBtn.setAttribute("aria-expanded", "false");
+        }
+
+        function placerMenu(menu) {
+            const rect = compositeur.getBoundingClientRect();
+            const haut = rect.top - 78;
+            const bas = window.innerHeight - rect.bottom - 20;
+            const espace = Math.min(440, Math.floor(haut >= bas ? haut : bas));
+            if (haut >= bas) {
+                menu.style.top = "auto";
+                menu.style.bottom = "calc(100% + 12px)";
+                menu.style.maxHeight = Math.max(160, espace) + "px";
+            } else {
+                menu.style.bottom = "auto";
+                menu.style.top = "calc(100% + 12px)";
+                menu.style.maxHeight = Math.max(160, espace) + "px";
+            }
+        }
+
+        function basculerMenu(menu, bouton) {
+            const ouvrir = menu.hidden;
+            fermerMenus();
+            if (!ouvrir) return;
+            menu.hidden = false;
+            placerMenu(menu);
+            bouton.setAttribute("aria-expanded", "true");
+        }
+
+        function majProgression() {
+            if (!studio.classList.contains("studio--fil") || etape === "fin") {
+                progression.hidden = true;
+                return;
+            }
+            const faits = CHAMPS.filter(function (c) { return fiche[c.cle] !== null; }).length;
+            progression.hidden = false;
+            progression.textContent = faits === 15 ? "Tout est là" : faits + " sur 15";
+        }
+
+        function entrerConversation() {
+            if (studio.classList.contains("studio--fil")) return;
+            studio.classList.remove("studio--vide");
+            studio.classList.add("studio--fil");
+            majProgression();
+        }
+
+        function majBoutonEnvoi() {
+            const aDuTexte = saisie.value.trim().length > 0;
+            envoi.hidden = !aDuTexte;
+            micro.hidden = aDuTexte;
+        }
+
+        function lireTokenArobase() {
+            const pos = saisie.selectionStart;
+            const avant = saisie.value.slice(0, pos);
+            const m = avant.match(/(^|\s)@([^\s@]*)$/);
+            if (!m) return null;
+            return { debut: pos - m[2].length - 1, fin: pos, filtre: m[2] };
+        }
+
+        function majArobase() {
+            tokenArobase = lireTokenArobase();
+            if (!tokenArobase || saisie.disabled) {
+                menuArobase.hidden = true;
+                return;
+            }
+            const filtre = normaliser(tokenArobase.filtre);
+            const proposables = CHAMPS.filter(function (c) { return fiche[c.cle] === null; });
+            if (cleDemandee) {
+                proposables.sort(function (a, b) {
+                    if (a.cle === cleDemandee) return -1;
+                    if (b.cle === cleDemandee) return 1;
+                    return 0;
+                });
+            }
+            const items = proposables.filter(function (c) {
+                if (!filtre) return true;
+                return normaliser(c.libelle).indexOf(filtre) !== -1 || c.cle.indexOf(filtre) !== -1;
+            });
+            menuArobase.innerHTML = "";
+            if (!items.length) {
+                menuArobase.hidden = true;
+                return;
+            }
+            items.forEach(function (c, index) {
+                const bouton = document.createElement("button");
+                bouton.type = "button";
+                bouton.className = "arobase__item" + (index === 0 ? " is-actif" : "");
+                bouton.setAttribute("role", "option");
+                bouton.appendChild(elt("strong", null, c.libelle));
+                bouton.appendChild(elt("span", null, c.aide));
+                bouton.addEventListener("mousedown", function (event) { event.preventDefault(); });
+                bouton.addEventListener("click", function () { insererChamp(c); });
+                menuArobase.appendChild(bouton);
+            });
+            menuArobase.hidden = false;
+            placerMenu(menuArobase);
+            menuMode.hidden = true;
+            modeBtn.setAttribute("aria-expanded", "false");
+        }
+
+        function insererChamp(champ) {
+            const token = tokenArobase || lireTokenArobase();
+            if (!token) return;
+            const avant = saisie.value.slice(0, token.debut);
+            const apres = saisie.value.slice(token.fin);
+            const insertion = champ.libelle + " : ";
+            const espace = avant && !/\s$/.test(avant) ? " " : "";
+            saisie.value = avant + espace + insertion + apres;
+            const pos = (avant + espace + insertion).length;
+            menuArobase.hidden = true;
+            tokenArobase = null;
+            saisie.focus();
+            saisie.setSelectionRange(pos, pos);
+            ajusterHauteur();
+            majBoutonEnvoi();
+        }
+
+        function direDictée(texte) {
+            dictee.textContent = texte;
+            dictee.hidden = !texte;
+            if (!texte) return;
+            window.clearTimeout(direDictée.timer);
+            direDictée.timer = window.setTimeout(function () { dictee.hidden = true; }, 3200);
+        }
+
+        // ---------- Boucle de conversation ----------
+
+        function poserQuestionSuivante() {
+            const manquants = champsManquants();
+            if (manquants.length === 0) {
+                cleDemandee = null;
+                majProgression();
+                afficherResume();
+                return;
+            }
+            etape = "collecte";
+            const champ = manquants[0];
+            cleDemandee = champ.cle;
+            majProgression();
+            bulle("assistant", champ.question);
+            activerSaisie(true, "Votre réponse…");
+            if (champ.cle === "type_bien") {
+                proposer([{ libelle: "Appartement", valeur: "appartement" }, { libelle: "Maison", valeur: "maison" }], function (o) { repondre(champ.cle, o.valeur); });
+            } else if (champ.cle === "ville") {
+                proposer(VILLES.map(function (v) { return { libelle: v, valeur: v }; }), function (o) { repondre(champ.cle, o.valeur); });
+            } else if (champ.cle === "etat") {
+                proposer(ETATS.map(function (e) { return { libelle: e.charAt(0).toUpperCase() + e.slice(1), valeur: e }; }), function (o) { repondre(champ.cle, o.valeur); });
+            } else if (champ.cle === "dpe") {
+                proposer(DPE.map(function (d) { return { libelle: d, valeur: d }; }), function (o) { repondre(champ.cle, o.valeur); });
+            } else if (["garage", "ascenseur", "balcon_terrasse", "cave"].indexOf(champ.cle) !== -1) {
+                proposer([{ libelle: "Oui", valeur: "oui" }, { libelle: "Non", valeur: "non" }], function (o) { repondre(champ.cle, o.valeur); });
+            }
+        }
+
+        // Une réponse déjà normalisée (bouton) est enregistrée telle quelle
+        function repondre(cle, valeur) {
+            fiche[cle] = valeur;
+            appliquerConventions();
+            poserQuestionSuivante();
+        }
+
+        function resumerCompris(remplis) {
+            const noms = remplis.map(function (cle) { return PAR_CLE[cle].libelle.toLowerCase(); });
+            return "C'est noté : " + noms.join(", ") + ".";
+        }
+
+        // Les réponses viennent de l'agent Claude Code (redfilebot), pas du script de mots-clés.
+        function parler(texte, extra) {
+            const corps = Object.assign({
+                message: texte || "",
+                fiche: fiche,
+                etape: etape,
+                historique: historique.slice(-8),
+                prix: prixBien,
+                refus_expert: refusExpert,
+                fiche_confirmee: ficheConfirmee,
+            }, extra || {});
+            return fetch("/parler", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(corps),
+            }).then(function (reponse) {
+                return reponse.json().then(function (donnees) {
+                    if (!reponse.ok) {
+                        throw new Error(donnees.erreur || "L'assistant n'a pas pu répondre.");
+                    }
+                    return donnees;
+                });
+            });
+        }
+
+        function appliquerAgent(donnees) {
+            CHAMPS.forEach(function (c) {
+                const valeur = donnees.fiche ? donnees.fiche[c.cle] : null;
+                fiche[c.cle] = valeur === undefined ? null : valeur;
+            });
+            etape = donnees.etape || etape;
+            refusExpert = donnees.refus_expert || 0;
+            ficheConfirmee = !!donnees.fiche_confirmee;
+            majProgression();
+            const suite = function () {
+                if (etape === "confirmation") montrerGrille();
+                if (donnees.choix && donnees.choix.length) {
+                    proposer(donnees.choix, function (option) {
+                        traiterMessage(option.libelle);
+                    });
+                }
+                if (donnees.pret_paiement) {
+                    afficherPaiement();
+                } else if (etape !== "clos") {
+                    activerSaisie(true, etape === "confirmation" ? "Vous pouvez confirmer ou corriger" : "Votre réponse…");
+                } else {
+                    activerSaisie(true, "Je reste disponible si vous voulez reprendre");
+                }
+            };
+            if (donnees.message) {
+                const corps = bulle("assistant", "");
+                historique.push({ role: "assistant", texte: donnees.message });
+                ecrireTexte(corps, donnees.message).then(suite);
+            } else {
+                suite();
+            }
+        }
+
+        function traiterMessage(texte) {
+            const brut = (texte || "").trim();
+            if (!brut) return;
+            fermerMenus();
+            entrerConversation();
+            retirerChoix();
+            bulle("user", brut);
+            historique.push({ role: "client", texte: brut });
+            frappe(true);
+            activerSaisie(false, "Je vous lis…");
+            parler(brut).then(function (donnees) {
+                frappe(false);
+                appliquerAgent(donnees);
+            }).catch(function () {
+                frappe(false);
+                bulle("assistant", "Je suis un instant indisponible. Réessayez dans un moment, je suis là.").classList.add("msg__bulle--erreur");
+                activerSaisie(true, "Votre réponse…");
+            });
+        }
+
+        function parlerEvenement(evenement, extra) {
+            frappe(true);
+            activerSaisie(false, "Je prépare la suite…");
+            return parler("", Object.assign({ evenement: evenement }, extra || {})).then(function (donnees) {
+                frappe(false);
+                appliquerAgent(donnees);
+            }).catch(function () {
+                frappe(false);
+                activerSaisie(true, "Votre réponse…");
+            });
+        }
+
+        // ---------- Résumé, confirmation, paiement, calcul ----------
+
+        function formater(cle, valeur) {
+            if (cle === "surface") return String(valeur).replace(".", ",") + " m²";
+            if (cle === "distance_centre") return String(valeur).replace(".", ",") + " km";
+            if (cle === "etage") return valeur === 0 ? "Rez-de-chaussée (0)" : String(valeur);
+            if (typeof valeur === "string") return valeur.charAt(0).toUpperCase() + valeur.slice(1);
+            return String(valeur);
+        }
+
+        function montrerGrille() {
+            fil.querySelectorAll(".msg").forEach(function (msg) {
+                if (msg.querySelector(".resume")) msg.remove();
+            });
+            const bloc = elt("div", "resume");
+            bloc.appendChild(elt("p", "resume__titre", "Voici ce que j'ai retenu."));
+            const grille = elt("dl", "resume__grille");
+            CHAMPS.forEach(function (c) {
+                const ligne = elt("div", "resume__ligne");
+                const dt = elt("dt");
+                dt.appendChild(elt("span", null, c.libelle));
+                ligne.appendChild(dt);
+                const valeur = fiche[c.cle] === null ? "—" : formater(c.cle, fiche[c.cle]);
+                ligne.appendChild(elt("dd", null, valeur));
+                grille.appendChild(ligne);
+            });
+            bloc.appendChild(grille);
+            bulle("assistant", bloc);
+        }
+
+        function afficherResume() {
+            montrerGrille();
+        }
+
+        function proposerCorrection() {
+            etape = "confirmation";
+            bulle("assistant", "Qu'aimeriez-vous corriger ?");
+            proposer(CHAMPS.map(function (c) { return { libelle: c.libelle, cle: c.cle }; }), function (o) {
+                fiche[o.cle] = null;
+                poserQuestionSuivante();
+            });
+        }
+
+        function afficherPaiement() {
+            etape = "paiement";
+            const carte = elt("div", "paiement");
+            carte.appendChild(elt("p", "paiement__titre", "Lancer l'estimation"));
+            carte.appendChild(elt("p", "paiement__montant", TARIF + " € TTC"));
+            carte.appendChild(elt("p", null, "Simulation : aucun prélèvement. Le prix du bien s'affiche juste après."));
+            const bouton = elt("button", "bouton");
+            bouton.type = "button";
+            bouton.appendChild(document.createTextNode("Régler et voir mon prix "));
+            const fleche = elt("span", "fleche");
+            fleche.setAttribute("aria-hidden", "true");
+            bouton.appendChild(fleche);
+            bouton.addEventListener("click", function () {
+                bouton.disabled = true;
+                lancerEstimation();
+            });
+            carte.appendChild(bouton);
+            bulle("assistant", carte);
+        }
+
+        function jouerRobot() {
+            const etapes = [
+                "Préparation des données de votre bien",
+                "Contrôle des quinze caractéristiques",
+                "Calcul par notre moteur",
+                "Comparaison au marché de votre ville",
+                "Restitution de votre estimation",
+            ];
+            const scene = elt("div", "calcul");
+            scene.innerHTML = ""
+                + "<div class=\"calcul__scene\" aria-hidden=\"true\">"
+                + "<div class=\"bot\">"
+                + "<div class=\"bot__antenne\"><span class=\"bot__led\"></span></div>"
+                + "<div class=\"bot__tete\">"
+                + "<span class=\"bot__oeil\"><i></i></span>"
+                + "<span class=\"bot__oeil\"><i></i></span>"
+                + "<span class=\"bot__sourire\"></span>"
+                + "</div>"
+                + "<div class=\"bot__torse\"><span class=\"bot__ecran\"><i></i><i></i><i></i></span><span class=\"bot__scan\"></span></div>"
+                + "<span class=\"bot__bras bot__bras--gauche\"></span>"
+                + "<span class=\"bot__bras bot__bras--droite\"></span>"
+                + "</div>"
+                + "<div class=\"calcul__sol\"></div>"
+                + "</div>"
+                + "<div class=\"calcul__texte\">"
+                + "<p class=\"calcul__nom\">redfilebot</p>"
+                + "<p class=\"calcul__statut\"></p>"
+                + "<ol class=\"calcul__etapes\"></ol>"
+                + "<div class=\"calcul__jauge\" aria-hidden=\"true\"><span></span></div>"
+                + "</div>";
+            const liste = scene.querySelector(".calcul__etapes");
+            const statut = scene.querySelector(".calcul__statut");
+            const barre = scene.querySelector(".calcul__jauge span");
+            etapes.forEach(function (libelle) {
+                const item = document.createElement("li");
+                item.textContent = libelle;
+                liste.appendChild(item);
+            });
+            bulle("assistant", scene);
+            const items = liste.querySelectorAll("li");
+            const pas = 10000 / etapes.length;
+            let index = 0;
+            return new Promise(function (resolve) {
+                function avancer() {
+                    items.forEach(function (item, position) {
+                        item.classList.toggle("is-fait", position < index);
+                        item.classList.toggle("is-actif", position === index);
+                    });
+                    if (index < etapes.length) statut.textContent = etapes[index];
+                    barre.style.width = (index / etapes.length) * 100 + "%";
+                    if (index >= etapes.length) {
+                        scene.classList.add("calcul--fini");
+                        statut.textContent = "Estimation prête";
+                        barre.style.width = "100%";
+                        window.setTimeout(resolve, 450);
+                        return;
+                    }
+                    index += 1;
+                    window.setTimeout(avancer, pas);
+                }
+                avancer();
+            });
+        }
+
+        async function lancerEstimation() {
+            etape = "calcul";
+            activerSaisie(false, "redfilebot calcule votre prix…");
+            const attente = jouerRobot();
+            let reponse;
+            let donnees;
             try {
-                const attente = jouerPhases();
-                const recu = await calcul;
+                reponse = await fetch("/estimate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(Object.assign({}, fiche, { paiement: true })),
+                });
+                donnees = await reponse.json();
+            } catch (e) {
                 await attente;
-                suivi.hidden = true;
-                if (!recu.ok) {
-                    erreur.textContent = recu.corps.erreur || "Estimation impossible.";
-                    erreur.hidden = false;
+                bulle("assistant", "Je n'arrive pas à joindre le serveur pour le moment. Réessayez dans un instant.").classList.add("msg__bulle--erreur");
+                afficherPaiement();
+                return;
+            }
+            await attente;
+            if (!reponse.ok) {
+                bulle("assistant", donnees.erreur || "Estimation impossible.").classList.add("msg__bulle--erreur");
+                parlerEvenement("erreur_moteur", { erreur: donnees.erreur || "" });
+                return;
+            }
+            prixBien = donnees.estimation;
+            afficherResultat(donnees.estimation);
+            parlerEvenement("paiement_valide", { prix: donnees.estimation });
+        }
+
+        function afficherResultat(estimation) {
+            etape = "fin";
+            majProgression();
+            const bloc = elt("div", "resultat");
+            bloc.appendChild(elt("p", "resultat__etiquette", "Voici l'estimation de votre bien"));
+            // Montant tel que renvoyé par /estimate, simplement mis en forme
+            bloc.appendChild(elt("p", "resultat__montant", Number(estimation).toLocaleString("fr-FR") + " €"));
+            bulle("assistant", bloc);
+            etape = "conversion";
+            majProgression();
+        }
+
+        // ---------- Entrées du client ----------
+
+        function envoyerSaisie() {
+            if (saisie.disabled) return;
+            const texte = saisie.value;
+            if (!texte.trim()) return;
+            saisie.value = "";
+            ajusterHauteur();
+            majBoutonEnvoi();
+            traiterMessage(texte);
+        }
+
+        function ajusterHauteur() {
+            saisie.style.height = "auto";
+            const hauteur = Math.min(saisie.scrollHeight, 140);
+            saisie.style.height = hauteur + "px";
+            compositeur.classList.toggle("compositeur--multi", hauteur > 52);
+        }
+
+        function deplacerArobase(sens) {
+            const items = Array.from(menuArobase.querySelectorAll(".arobase__item"));
+            if (!items.length) return;
+            const index = items.findIndex(function (el) { return el.classList.contains("is-actif"); });
+            const suivant = sens === "bas"
+                ? (index + 1) % items.length
+                : (index - 1 + items.length) % items.length;
+            items.forEach(function (el) { el.classList.remove("is-actif"); });
+            items[suivant].classList.add("is-actif");
+            items[suivant].scrollIntoView({ block: "nearest" });
+        }
+
+        compositeur.addEventListener("submit", function (event) {
+            event.preventDefault();
+            envoyerSaisie();
+        });
+        saisie.addEventListener("input", function () {
+            ajusterHauteur();
+            majBoutonEnvoi();
+            majArobase();
+        });
+        saisie.addEventListener("keydown", function (event) {
+            if (!menuArobase.hidden) {
+                if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    deplacerArobase(event.key === "ArrowDown" ? "bas" : "haut");
                     return;
                 }
-                const euros = Math.round(recu.corps.estimation).toLocaleString("fr-FR");
-                resultat.textContent = "Estimation : " + euros + " €";
-                resultat.hidden = false;
-                suite.hidden = false;
-            } catch (e) {
-                suivi.hidden = true;
-                erreur.textContent = "Impossible de joindre le serveur.";
-                erreur.hidden = false;
-            } finally {
-                bouton.disabled = false;
-                confirmerPaiement.disabled = false;
+                if (event.key === "Enter" && !event.shiftKey) {
+                    const actif = menuArobase.querySelector(".arobase__item.is-actif");
+                    if (actif) {
+                        event.preventDefault();
+                        actif.click();
+                        return;
+                    }
+                }
+                if (event.key === "Escape") {
+                    event.preventDefault();
+                    menuArobase.hidden = true;
+                    return;
+                }
+            }
+            if (event.key === "Escape") {
+                fermerMenus();
+                return;
+            }
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                envoyerSaisie();
             }
         });
+
+        modeBtn.addEventListener("click", function () { basculerMenu(menuMode, modeBtn); });
+        document.addEventListener("click", function (event) {
+            if (!dock.contains(event.target)) fermerMenus();
+        });
+
+        const Reco = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const reco = Reco ? new Reco() : null;
+        if (reco) {
+            reco.lang = "fr-FR";
+            reco.interimResults = true;
+            reco.continuous = false;
+            reco.onresult = function (event) {
+                let dit = "";
+                for (let i = event.resultIndex; i < event.results.length; i += 1) {
+                    dit += event.results[i][0].transcript;
+                }
+                saisie.value = (baseDictee ? baseDictee + " " : "") + dit;
+                ajusterHauteur();
+                majBoutonEnvoi();
+            };
+            reco.onerror = function () {
+                ecoute = false;
+                micro.classList.remove("is-ecoute");
+                micro.setAttribute("aria-pressed", "false");
+                direDictée("La dictée n'a pas pu démarrer.");
+            };
+            reco.onend = function () {
+                ecoute = false;
+                micro.classList.remove("is-ecoute");
+                micro.setAttribute("aria-pressed", "false");
+            };
+        }
+        micro.addEventListener("click", function () {
+            if (saisie.disabled) return;
+            if (!reco) {
+                direDictée("La dictée n'est pas disponible dans ce navigateur.");
+                return;
+            }
+            if (ecoute) {
+                reco.stop();
+                return;
+            }
+            baseDictee = saisie.value.trim();
+            try {
+                reco.start();
+                ecoute = true;
+                micro.classList.add("is-ecoute");
+                micro.setAttribute("aria-pressed", "true");
+            } catch (e) {
+                direDictée("La dictée n'a pas pu démarrer.");
+            }
+        });
+
+        majBoutonEnvoi();
+        saisie.focus();
     </script>
 </body>
 </html>

@@ -6,11 +6,11 @@
     <title>J'estime mon bien avec redfile</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body class="page-chat">
     <header class="header">
         <div class="cadre header__inner">
             <a class="logo" href="/">
-                <img src="/redfile_logo.png" alt="Redfile">
+                <img src="/redfile_logo.png" alt="redfile">
             </a>
             <nav>
                 <ul class="nav">
@@ -22,23 +22,44 @@
         </div>
     </header>
 
-    <main>
-        <section class="page-titre page-titre--compact">
-            <div class="cadre">
-                <h1>Estimez votre bien</h1>
-                <p>L'estimation coûte {{ prix }} € TTC. Décrivez le bien avec vos mots, je m'occupe du reste.</p>
+    <main class="studio studio--vide" id="studio">
+        <section class="besoins" aria-labelledby="besoins-titre">
+            <div class="besoins__carte">
+                <h2 id="besoins-titre">Votre estimation, simplement</h2>
+                <p class="besoins__tarif">{{ prix }} € TTC. Le prix du bien s'affiche après votre accord et le règlement.</p>
             </div>
         </section>
 
-        <section class="cadre cadre--large chat-layout">
-            <div class="chat carte" id="chat">
-                <div class="chat__fil" id="fil" role="log" aria-live="polite" aria-label="Conversation"></div>
-                <div class="chat__saisie">
-                    <textarea id="saisie" rows="1" placeholder="Décrivez votre bien ou répondez ici…" aria-label="Votre message"></textarea>
-                    <button type="button" class="bouton chat__envoi" id="envoi">Envoyer <span class="fleche" aria-hidden="true"></span></button>
-                </div>
+        <div class="studio__fil" id="fil" role="log" aria-live="polite" aria-label="Conversation"></div>
+
+        <div class="studio__bloc">
+            <h1 class="accroche" id="accroche">Alors ? Dites-moi tout.</h1>
+            <p class="progression" id="progression" hidden></p>
+
+            <div class="dock" id="dock">
+            <div class="menu menu--mode" id="menuMode" role="menu" hidden>
+                <p class="menu__titre">Assistant</p>
+                <p class="mode__ligne"><span class="mode__pastille" aria-hidden="true"></span>Estimation de votre bien</p>
+                <p class="menu__intro">Le prix affiché est celui du modèle, une fois que vous avez confirmé et réglé.</p>
             </div>
-        </section>
+            <div class="menu menu--arobase" id="menuArobase" role="listbox" hidden></div>
+
+            <form class="compositeur" id="compositeur" autocomplete="off">
+                <textarea id="saisie" rows="1" placeholder="Racontez-moi votre bien…" aria-label="Votre message"></textarea>
+                <button type="button" class="mode-btn" id="mode" aria-label="Mode de l'assistant" aria-controls="menuMode" aria-expanded="false" aria-haspopup="menu">
+                    <span>redfile</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <button type="button" class="icone-btn" id="micro" aria-label="Dicter" aria-pressed="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>
+                </button>
+                <button type="submit" class="envoi-rond" id="envoi" aria-label="Envoyer" hidden>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+                </button>
+            </form>
+            </div>
+            <p class="dictee" id="dictee" hidden></p>
+        </div>
     </main>
 
     <footer class="footer">
@@ -54,31 +75,23 @@
 
         // Les 15 caractéristiques, dans l'ordre de data/house_pred.csv. Ni plus, ni moins.
         const CHAMPS = [
-            { cle: "surface", libelle: "Surface", aide: "de 15 à 250 m²", question: "Quelle est la surface du bien, en m² ?" },
-            { cle: "type_bien", libelle: "Type de bien", aide: "appartement ou maison", question: "S'agit-il d'un appartement ou d'une maison ?" },
-            { cle: "nb_pieces", libelle: "Pièces", aide: "séjour compris, de 1 à 12", question: "Combien de pièces compte le bien, séjour compris ?" },
-            { cle: "nb_chambres", libelle: "Chambres", aide: "de 1 à 10", question: "Combien de chambres compte le bien ?" },
-            { cle: "nb_salles_de_bain", libelle: "Salles de bain", aide: "de 1 à 5", question: "Combien de salles de bain compte le bien ?" },
-            { cle: "etage", libelle: "Étage", aide: "0 pour un rez-de-chaussée, jusqu'à 20", question: "À quel étage se situe le bien ? (0 pour un rez-de-chaussée)" },
-            { cle: "annee_construction", libelle: "Année de construction", aide: "de 1900 à 2025", question: "En quelle année le bien a-t-il été construit ?" },
-            { cle: "ville", libelle: "Ville", aide: "Paris, Lyon, Lille, Marseille, Rennes, Bordeaux ou Strasbourg", question: "Dans quelle ville se situe le bien ?" },
-            { cle: "etat", libelle: "État", aide: "mauvais, moyen, bon ou excellent", question: "Quel est l'état général du bien ?" },
-            { cle: "dpe", libelle: "DPE", aide: "une lettre de A à G", question: "Quelle est la classe DPE du bien ?" },
-            { cle: "garage", libelle: "Garage", aide: "oui ou non", question: "Le bien dispose-t-il d'un garage ?" },
+            { cle: "surface", libelle: "Surface", aide: "entre 15 et 250 m²", question: "Quelle est la surface, en m² ?" },
+            { cle: "type_bien", libelle: "Type de bien", aide: "appartement ou maison", question: "C'est un appartement ou une maison ?" },
+            { cle: "nb_pieces", libelle: "Pièces", aide: "séjour compris, entre 1 et 12", question: "Combien de pièces, séjour compris ?" },
+            { cle: "nb_chambres", libelle: "Chambres", aide: "entre 1 et 10", question: "Et combien de chambres ?" },
+            { cle: "nb_salles_de_bain", libelle: "Salles de bain", aide: "entre 1 et 5", question: "Combien de salles de bain ?" },
+            { cle: "etage", libelle: "Étage", aide: "0 au rez-de-chaussée, jusqu'à 20", question: "À quel étage ? Le rez-de-chaussée, c'est 0." },
+            { cle: "annee_construction", libelle: "Année de construction", aide: "entre 1900 et 2025", question: "En quelle année a-t-il été construit ?" },
+            { cle: "ville", libelle: "Ville", aide: "Paris, Lyon, Lille, Marseille, Rennes, Bordeaux ou Strasbourg", question: "Dans quelle ville se trouve-t-il ?" },
+            { cle: "etat", libelle: "État", aide: "mauvais, moyen, bon ou excellent", question: "Comment le trouvez-vous : mauvais, moyen, bon ou excellent ?" },
+            { cle: "dpe", libelle: "DPE", aide: "une lettre de A à G", question: "Quelle est la classe DPE, de A à G ?" },
+            { cle: "garage", libelle: "Garage", aide: "oui ou non", question: "Y a-t-il un garage ?" },
             { cle: "ascenseur", libelle: "Ascenseur", aide: "oui ou non", question: "Y a-t-il un ascenseur ?" },
-            { cle: "balcon_terrasse", libelle: "Balcon ou terrasse", aide: "oui ou non", question: "Le bien a-t-il un balcon ou une terrasse ?" },
-            { cle: "cave", libelle: "Cave", aide: "oui ou non", question: "Le bien dispose-t-il d'une cave ?" },
-            { cle: "distance_centre", libelle: "Distance au centre", aide: "en km, de 0 à 30", question: "À quelle distance du centre-ville se trouve le bien ? (en km, ou en mètres si c'est moins d'un kilomètre)" },
+            { cle: "balcon_terrasse", libelle: "Balcon ou terrasse", aide: "oui ou non", question: "Y a-t-il un balcon ou une terrasse ?" },
+            { cle: "cave", libelle: "Cave", aide: "oui ou non", question: "Y a-t-il une cave ?" },
+            { cle: "distance_centre", libelle: "Distance au centre", aide: "en km, entre 0 et 30", question: "À quelle distance du centre-ville ? En kilomètres, ou en mètres si c'est tout près." },
         ];
         const PAR_CLE = Object.fromEntries(CHAMPS.map(function (c) { return [c.cle, c]; }));
-
-        // Regroupement d'affichage du message d'accueil
-        const GROUPES = [
-            { titre: "Le bien", cles: ["type_bien", "ville", "surface", "distance_centre"] },
-            { titre: "La distribution", cles: ["nb_pieces", "nb_chambres", "nb_salles_de_bain", "etage"] },
-            { titre: "L'état du logement", cles: ["annee_construction", "etat", "dpe"] },
-            { titre: "Les équipements", cles: ["garage", "ascenseur", "balcon_terrasse", "cave"] },
-        ];
 
         const VILLES = ["Paris", "Lyon", "Lille", "Marseille", "Rennes", "Bordeaux", "Strasbourg"];
         const ETATS = ["mauvais", "moyen", "bon", "excellent"];
@@ -102,12 +115,28 @@
         const fiche = {};
         CHAMPS.forEach(function (c) { fiche[c.cle] = null; });
 
-        let etape = "decrire"; // decrire, collecte, confirmation, paiement, calcul, fin
+        let etape = "collecte";
+        let prixBien = null;
+        let refusExpert = 0;
+        let ficheConfirmee = false;
+        let historique = [];
         let cleDemandee = null;
 
         const fil = document.getElementById("fil");
         const saisie = document.getElementById("saisie");
         const envoi = document.getElementById("envoi");
+        const studio = document.getElementById("studio");
+        const dock = document.getElementById("dock");
+        const compositeur = document.getElementById("compositeur");
+        const modeBtn = document.getElementById("mode");
+        const micro = document.getElementById("micro");
+        const menuMode = document.getElementById("menuMode");
+        const menuArobase = document.getElementById("menuArobase");
+        const progression = document.getElementById("progression");
+        const dictee = document.getElementById("dictee");
+        let tokenArobase = null;
+        let baseDictee = "";
+        let ecoute = false;
 
         // ---------- Utilitaires de texte ----------
 
@@ -309,17 +338,11 @@
         function bulle(role, contenu) {
             const ligne = document.createElement("div");
             ligne.className = "msg msg--" + role;
-            if (role === "assistant") {
-                const avatar = document.createElement("span");
-                avatar.className = "msg__avatar";
-                avatar.setAttribute("aria-hidden", "true");
-                avatar.textContent = "r";
-                ligne.appendChild(avatar);
-            }
             const corps = document.createElement("div");
             corps.className = "msg__bulle";
             if (typeof contenu === "string") {
                 corps.textContent = contenu;
+                corps.classList.add("msg__bulle--texte");
             } else {
                 corps.appendChild(contenu);
             }
@@ -327,6 +350,33 @@
             fil.appendChild(ligne);
             defiler();
             return corps;
+        }
+
+        function ecrireTexte(corps, texte) {
+            const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (reduit || !texte) {
+                corps.textContent = texte || "";
+                defiler();
+                return Promise.resolve();
+            }
+            corps.classList.add("is-ecrit");
+            corps.textContent = "";
+            let index = 0;
+            return new Promise(function (resolve) {
+                function pas() {
+                    index += 1;
+                    corps.textContent = texte.slice(0, index);
+                    if (index % 3 === 0) defiler();
+                    if (index < texte.length) {
+                        window.setTimeout(pas, texte.charAt(index - 1) === " " ? 8 : 16);
+                    } else {
+                        corps.classList.remove("is-ecrit");
+                        defiler();
+                        resolve();
+                    }
+                }
+                pas();
+            });
         }
 
         function elt(balise, classe, texte) {
@@ -349,7 +399,6 @@
                 bouton.type = "button";
                 bouton.addEventListener("click", function () {
                     retirerChoix();
-                    bulle("user", option.libelle);
                     action(option);
                 });
                 zone.appendChild(bouton);
@@ -363,7 +412,6 @@
             if (actif && !indicateur) {
                 indicateur = elt("div", "msg msg--assistant");
                 indicateur.id = "frappe";
-                indicateur.appendChild(elt("span", "msg__avatar", "r"));
                 const corps = elt("div", "msg__bulle frappe");
                 corps.setAttribute("aria-label", "Redfile écrit");
                 for (let i = 0; i < 3; i += 1) corps.appendChild(elt("span", "frappe__point"));
@@ -378,33 +426,141 @@
         function activerSaisie(actif, indice) {
             saisie.disabled = !actif;
             envoi.disabled = !actif;
+            micro.disabled = !actif;
+            modeBtn.disabled = !actif;
             if (indice) saisie.placeholder = indice;
+            majBoutonEnvoi();
             if (actif) saisie.focus();
         }
 
-        // ---------- Message d'accueil ----------
+        // ---------- Écran d'accueil, menus, passage au fil ----------
 
-        function accueil() {
-            const bloc = elt("div", "accueil");
-            bloc.appendChild(elt("p", "accueil__titre", "Bonjour, je suis l'assistant redfile."));
-            bloc.appendChild(elt("p", null, "Pour estimer votre bien, j'ai besoin de 15 informations, pas une de plus. Décrivez-le avec vos mots : je repère ce que vous me dites et je vous pose une question pour chaque information manquante."));
-            const grille = elt("div", "accueil__grille");
-            GROUPES.forEach(function (groupe) {
-                const carte = elt("div", "accueil__groupe");
-                carte.appendChild(elt("p", "accueil__groupe-titre", groupe.titre));
-                const liste = elt("ul", "accueil__liste");
-                groupe.cles.forEach(function (cle) {
-                    const li = elt("li");
-                    li.appendChild(elt("strong", null, PAR_CLE[cle].libelle));
-                    li.appendChild(elt("span", null, PAR_CLE[cle].aide));
-                    liste.appendChild(li);
+        function fermerMenus() {
+            menuMode.hidden = true;
+            menuArobase.hidden = true;
+            modeBtn.setAttribute("aria-expanded", "false");
+        }
+
+        function placerMenu(menu) {
+            const rect = compositeur.getBoundingClientRect();
+            const haut = rect.top - 78;
+            const bas = window.innerHeight - rect.bottom - 20;
+            const espace = Math.min(440, Math.floor(haut >= bas ? haut : bas));
+            if (haut >= bas) {
+                menu.style.top = "auto";
+                menu.style.bottom = "calc(100% + 12px)";
+                menu.style.maxHeight = Math.max(160, espace) + "px";
+            } else {
+                menu.style.bottom = "auto";
+                menu.style.top = "calc(100% + 12px)";
+                menu.style.maxHeight = Math.max(160, espace) + "px";
+            }
+        }
+
+        function basculerMenu(menu, bouton) {
+            const ouvrir = menu.hidden;
+            fermerMenus();
+            if (!ouvrir) return;
+            menu.hidden = false;
+            placerMenu(menu);
+            bouton.setAttribute("aria-expanded", "true");
+        }
+
+        function majProgression() {
+            if (!studio.classList.contains("studio--fil") || etape === "fin") {
+                progression.hidden = true;
+                return;
+            }
+            const faits = CHAMPS.filter(function (c) { return fiche[c.cle] !== null; }).length;
+            progression.hidden = false;
+            progression.textContent = faits === 15 ? "Tout est là" : faits + " sur 15";
+        }
+
+        function entrerConversation() {
+            if (studio.classList.contains("studio--fil")) return;
+            studio.classList.remove("studio--vide");
+            studio.classList.add("studio--fil");
+            majProgression();
+        }
+
+        function majBoutonEnvoi() {
+            const aDuTexte = saisie.value.trim().length > 0;
+            envoi.hidden = !aDuTexte;
+            micro.hidden = aDuTexte;
+        }
+
+        function lireTokenArobase() {
+            const pos = saisie.selectionStart;
+            const avant = saisie.value.slice(0, pos);
+            const m = avant.match(/(^|\s)@([^\s@]*)$/);
+            if (!m) return null;
+            return { debut: pos - m[2].length - 1, fin: pos, filtre: m[2] };
+        }
+
+        function majArobase() {
+            tokenArobase = lireTokenArobase();
+            if (!tokenArobase || saisie.disabled) {
+                menuArobase.hidden = true;
+                return;
+            }
+            const filtre = normaliser(tokenArobase.filtre);
+            const proposables = CHAMPS.filter(function (c) { return fiche[c.cle] === null; });
+            if (cleDemandee) {
+                proposables.sort(function (a, b) {
+                    if (a.cle === cleDemandee) return -1;
+                    if (b.cle === cleDemandee) return 1;
+                    return 0;
                 });
-                carte.appendChild(liste);
-                grille.appendChild(carte);
+            }
+            const items = proposables.filter(function (c) {
+                if (!filtre) return true;
+                return normaliser(c.libelle).indexOf(filtre) !== -1 || c.cle.indexOf(filtre) !== -1;
             });
-            bloc.appendChild(grille);
-            bloc.appendChild(elt("p", "accueil__pied", "Ce que vous ne précisez pas, je vous le demande : je ne devine rien. Vous voyez le montant de l'estimation une fois la fiche confirmée et réglée (" + TARIF + " € TTC)."));
-            bulle("assistant", bloc);
+            menuArobase.innerHTML = "";
+            if (!items.length) {
+                menuArobase.hidden = true;
+                return;
+            }
+            items.forEach(function (c, index) {
+                const bouton = document.createElement("button");
+                bouton.type = "button";
+                bouton.className = "arobase__item" + (index === 0 ? " is-actif" : "");
+                bouton.setAttribute("role", "option");
+                bouton.appendChild(elt("strong", null, c.libelle));
+                bouton.appendChild(elt("span", null, c.aide));
+                bouton.addEventListener("mousedown", function (event) { event.preventDefault(); });
+                bouton.addEventListener("click", function () { insererChamp(c); });
+                menuArobase.appendChild(bouton);
+            });
+            menuArobase.hidden = false;
+            placerMenu(menuArobase);
+            menuMode.hidden = true;
+            modeBtn.setAttribute("aria-expanded", "false");
+        }
+
+        function insererChamp(champ) {
+            const token = tokenArobase || lireTokenArobase();
+            if (!token) return;
+            const avant = saisie.value.slice(0, token.debut);
+            const apres = saisie.value.slice(token.fin);
+            const insertion = champ.libelle + " : ";
+            const espace = avant && !/\s$/.test(avant) ? " " : "";
+            saisie.value = avant + espace + insertion + apres;
+            const pos = (avant + espace + insertion).length;
+            menuArobase.hidden = true;
+            tokenArobase = null;
+            saisie.focus();
+            saisie.setSelectionRange(pos, pos);
+            ajusterHauteur();
+            majBoutonEnvoi();
+        }
+
+        function direDictée(texte) {
+            dictee.textContent = texte;
+            dictee.hidden = !texte;
+            if (!texte) return;
+            window.clearTimeout(direDictée.timer);
+            direDictée.timer = window.setTimeout(function () { dictee.hidden = true; }, 3200);
         }
 
         // ---------- Boucle de conversation ----------
@@ -413,12 +569,14 @@
             const manquants = champsManquants();
             if (manquants.length === 0) {
                 cleDemandee = null;
+                majProgression();
                 afficherResume();
                 return;
             }
             etape = "collecte";
             const champ = manquants[0];
             cleDemandee = champ.cle;
+            majProgression();
             bulle("assistant", champ.question);
             activerSaisie(true, "Votre réponse…");
             if (champ.cle === "type_bien") {
@@ -443,49 +601,97 @@
 
         function resumerCompris(remplis) {
             const noms = remplis.map(function (cle) { return PAR_CLE[cle].libelle.toLowerCase(); });
-            return "J'ai bien noté : " + noms.join(", ") + ".";
+            return "C'est noté : " + noms.join(", ") + ".";
+        }
+
+        // Les réponses viennent de l'agent Claude Code (redfilebot), pas du script de mots-clés.
+        function parler(texte, extra) {
+            const corps = Object.assign({
+                message: texte || "",
+                fiche: fiche,
+                etape: etape,
+                historique: historique.slice(-8),
+                prix: prixBien,
+                refus_expert: refusExpert,
+                fiche_confirmee: ficheConfirmee,
+            }, extra || {});
+            return fetch("/parler", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(corps),
+            }).then(function (reponse) {
+                return reponse.json().then(function (donnees) {
+                    if (!reponse.ok) {
+                        throw new Error(donnees.erreur || "L'assistant n'a pas pu répondre.");
+                    }
+                    return donnees;
+                });
+            });
+        }
+
+        function appliquerAgent(donnees) {
+            CHAMPS.forEach(function (c) {
+                const valeur = donnees.fiche ? donnees.fiche[c.cle] : null;
+                fiche[c.cle] = valeur === undefined ? null : valeur;
+            });
+            etape = donnees.etape || etape;
+            refusExpert = donnees.refus_expert || 0;
+            ficheConfirmee = !!donnees.fiche_confirmee;
+            majProgression();
+            const suite = function () {
+                if (etape === "confirmation") montrerGrille();
+                if (donnees.choix && donnees.choix.length) {
+                    proposer(donnees.choix, function (option) {
+                        traiterMessage(option.libelle);
+                    });
+                }
+                if (donnees.pret_paiement) {
+                    afficherPaiement();
+                } else if (etape !== "clos") {
+                    activerSaisie(true, etape === "confirmation" ? "Vous pouvez confirmer ou corriger" : "Votre réponse…");
+                } else {
+                    activerSaisie(true, "Je reste disponible si vous voulez reprendre");
+                }
+            };
+            if (donnees.message) {
+                const corps = bulle("assistant", "");
+                historique.push({ role: "assistant", texte: donnees.message });
+                ecrireTexte(corps, donnees.message).then(suite);
+            } else {
+                suite();
+            }
         }
 
         function traiterMessage(texte) {
-            const brut = texte.trim();
+            const brut = (texte || "").trim();
             if (!brut) return;
+            fermerMenus();
+            entrerConversation();
             retirerChoix();
             bulle("user", brut);
+            historique.push({ role: "client", texte: brut });
+            frappe(true);
+            activerSaisie(false, "Je vous lis…");
+            parler(brut).then(function (donnees) {
+                frappe(false);
+                appliquerAgent(donnees);
+            }).catch(function () {
+                frappe(false);
+                bulle("assistant", "Je suis un instant indisponible. Réessayez dans un moment, je suis là.").classList.add("msg__bulle--erreur");
+                activerSaisie(true, "Votre réponse…");
+            });
+        }
 
-            if (etape === "decrire") {
-                const remplis = appliquer(extraire(brut));
-                if (remplis.length === 0) {
-                    bulle("assistant", "Je n'ai pas repéré d'information exploitable. Pouvez-vous décrire votre bien : type, surface, ville, étage… ? Sinon, je vous poserai les questions une à une.");
-                    etape = "collecte";
-                    poserQuestionSuivante();
-                    return;
-                }
-                bulle("assistant", resumerCompris(remplis));
-                poserQuestionSuivante();
-                return;
-            }
-
-            if (etape === "collecte" && cleDemandee) {
-                const lu = lireReponse(cleDemandee, brut);
-                if (lu && lu.erreur) {
-                    bulle("assistant", lu.erreur);
-                    poserQuestionSuivante();
-                    return;
-                }
-                if (lu) {
-                    fiche[cleDemandee] = lu.valeur;
-                }
-                // Le client peut aussi donner d'autres informations dans sa réponse
-                const autres = appliquer(extraire(brut)).filter(function (c) { return c !== cleDemandee; });
-                if (!lu && autres.length === 0) {
-                    bulle("assistant", "Je n'ai pas compris. " + PAR_CLE[cleDemandee].libelle + " : " + PAR_CLE[cleDemandee].aide + ".");
-                    poserQuestionSuivante();
-                    return;
-                }
-                if (autres.length) bulle("assistant", resumerCompris(autres));
-                appliquerConventions();
-                poserQuestionSuivante();
-            }
+        function parlerEvenement(evenement, extra) {
+            frappe(true);
+            activerSaisie(false, "Je prépare la suite…");
+            return parler("", Object.assign({ evenement: evenement }, extra || {})).then(function (donnees) {
+                frappe(false);
+                appliquerAgent(donnees);
+            }).catch(function () {
+                frappe(false);
+                activerSaisie(true, "Votre réponse…");
+            });
         }
 
         // ---------- Résumé, confirmation, paiement, calcul ----------
@@ -498,38 +704,33 @@
             return String(valeur);
         }
 
-        function afficherResume() {
-            etape = "confirmation";
-            activerSaisie(false, "Confirmez ou corrigez les informations ci-dessus");
+        function montrerGrille() {
+            fil.querySelectorAll(".msg").forEach(function (msg) {
+                if (msg.querySelector(".resume")) msg.remove();
+            });
             const bloc = elt("div", "resume");
-            bloc.appendChild(elt("p", "resume__titre", "Confirmez-vous les informations suivantes ?"));
+            bloc.appendChild(elt("p", "resume__titre", "Voici ce que j'ai retenu."));
             const grille = elt("dl", "resume__grille");
             CHAMPS.forEach(function (c) {
                 const ligne = elt("div", "resume__ligne");
                 const dt = elt("dt");
                 dt.appendChild(elt("span", null, c.libelle));
-                dt.appendChild(elt("code", null, c.cle));
                 ligne.appendChild(dt);
-                ligne.appendChild(elt("dd", null, formater(c.cle, fiche[c.cle])));
+                const valeur = fiche[c.cle] === null ? "—" : formater(c.cle, fiche[c.cle]);
+                ligne.appendChild(elt("dd", null, valeur));
                 grille.appendChild(ligne);
             });
             bloc.appendChild(grille);
             bulle("assistant", bloc);
-            proposer([
-                { libelle: "Oui, je confirme", id: "oui" },
-                { libelle: "Je veux corriger", id: "corriger" },
-            ], function (o) {
-                if (o.id === "oui") {
-                    afficherPaiement();
-                } else {
-                    proposerCorrection();
-                }
-            });
+        }
+
+        function afficherResume() {
+            montrerGrille();
         }
 
         function proposerCorrection() {
             etape = "confirmation";
-            bulle("assistant", "Quelle information souhaitez-vous corriger ?");
+            bulle("assistant", "Qu'aimeriez-vous corriger ?");
             proposer(CHAMPS.map(function (c) { return { libelle: c.libelle, cle: c.cle }; }), function (o) {
                 fiche[o.cle] = null;
                 poserQuestionSuivante();
@@ -539,12 +740,12 @@
         function afficherPaiement() {
             etape = "paiement";
             const carte = elt("div", "paiement");
-            carte.appendChild(elt("p", "paiement__titre", "Régler l'estimation"));
+            carte.appendChild(elt("p", "paiement__titre", "Lancer l'estimation"));
             carte.appendChild(elt("p", "paiement__montant", TARIF + " € TTC"));
-            carte.appendChild(elt("p", null, "C'est le tarif du service, pas le prix du bien. Le calcul démarre après le règlement. Paiement simulé : aucun prélèvement réel."));
+            carte.appendChild(elt("p", null, "Simulation : aucun prélèvement. Le prix du bien s'affiche juste après."));
             const bouton = elt("button", "bouton");
             bouton.type = "button";
-            bouton.appendChild(document.createTextNode("Payer et estimer "));
+            bouton.appendChild(document.createTextNode("Régler et voir mon prix "));
             const fleche = elt("span", "fleche");
             fleche.setAttribute("aria-hidden", "true");
             bouton.appendChild(fleche);
@@ -556,43 +757,110 @@
             bulle("assistant", carte);
         }
 
+        function jouerRobot() {
+            const etapes = [
+                "Préparation des données de votre bien",
+                "Contrôle des quinze caractéristiques",
+                "Calcul par notre moteur",
+                "Comparaison au marché de votre ville",
+                "Restitution de votre estimation",
+            ];
+            const scene = elt("div", "calcul");
+            scene.innerHTML = ""
+                + "<div class=\"calcul__scene\" aria-hidden=\"true\">"
+                + "<div class=\"bot\">"
+                + "<div class=\"bot__antenne\"><span class=\"bot__led\"></span></div>"
+                + "<div class=\"bot__tete\">"
+                + "<span class=\"bot__oeil\"><i></i></span>"
+                + "<span class=\"bot__oeil\"><i></i></span>"
+                + "<span class=\"bot__sourire\"></span>"
+                + "</div>"
+                + "<div class=\"bot__torse\"><span class=\"bot__ecran\"><i></i><i></i><i></i></span><span class=\"bot__scan\"></span></div>"
+                + "<span class=\"bot__bras bot__bras--gauche\"></span>"
+                + "<span class=\"bot__bras bot__bras--droite\"></span>"
+                + "</div>"
+                + "<div class=\"calcul__sol\"></div>"
+                + "</div>"
+                + "<div class=\"calcul__texte\">"
+                + "<p class=\"calcul__nom\">redfilebot</p>"
+                + "<p class=\"calcul__statut\"></p>"
+                + "<ol class=\"calcul__etapes\"></ol>"
+                + "<div class=\"calcul__jauge\" aria-hidden=\"true\"><span></span></div>"
+                + "</div>";
+            const liste = scene.querySelector(".calcul__etapes");
+            const statut = scene.querySelector(".calcul__statut");
+            const barre = scene.querySelector(".calcul__jauge span");
+            etapes.forEach(function (libelle) {
+                const item = document.createElement("li");
+                item.textContent = libelle;
+                liste.appendChild(item);
+            });
+            bulle("assistant", scene);
+            const items = liste.querySelectorAll("li");
+            const pas = 10000 / etapes.length;
+            let index = 0;
+            return new Promise(function (resolve) {
+                function avancer() {
+                    items.forEach(function (item, position) {
+                        item.classList.toggle("is-fait", position < index);
+                        item.classList.toggle("is-actif", position === index);
+                    });
+                    if (index < etapes.length) statut.textContent = etapes[index];
+                    barre.style.width = (index / etapes.length) * 100 + "%";
+                    if (index >= etapes.length) {
+                        scene.classList.add("calcul--fini");
+                        statut.textContent = "Estimation prête";
+                        barre.style.width = "100%";
+                        window.setTimeout(resolve, 450);
+                        return;
+                    }
+                    index += 1;
+                    window.setTimeout(avancer, pas);
+                }
+                avancer();
+            });
+        }
+
         async function lancerEstimation() {
             etape = "calcul";
-            frappe(true);
-            // Les 15 champs de la fiche, plus l'indicateur de paiement exigé par la route
-            const corps = Object.assign({}, fiche, { paiement: true });
+            activerSaisie(false, "redfilebot calcule votre prix…");
+            const attente = jouerRobot();
+            let reponse;
+            let donnees;
             try {
-                const reponse = await fetch("/estimate", {
+                reponse = await fetch("/estimate", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(corps),
+                    body: JSON.stringify(Object.assign({}, fiche, { paiement: true })),
                 });
-                const donnees = await reponse.json();
-                frappe(false);
-                if (!reponse.ok) {
-                    // Message de valider(), tel quel
-                    bulle("assistant", donnees.erreur || "Estimation impossible.").classList.add("msg__bulle--erreur");
-                    bulle("assistant", "Corrigeons la fiche ensemble.");
-                    proposerCorrection();
-                    return;
-                }
-                afficherResultat(donnees.estimation);
+                donnees = await reponse.json();
             } catch (e) {
-                frappe(false);
-                bulle("assistant", "Impossible de joindre le serveur. Réessayez dans un instant.").classList.add("msg__bulle--erreur");
+                await attente;
+                bulle("assistant", "Je n'arrive pas à joindre le serveur pour le moment. Réessayez dans un instant.").classList.add("msg__bulle--erreur");
                 afficherPaiement();
+                return;
             }
+            await attente;
+            if (!reponse.ok) {
+                bulle("assistant", donnees.erreur || "Estimation impossible.").classList.add("msg__bulle--erreur");
+                parlerEvenement("erreur_moteur", { erreur: donnees.erreur || "" });
+                return;
+            }
+            prixBien = donnees.estimation;
+            afficherResultat(donnees.estimation);
+            parlerEvenement("paiement_valide", { prix: donnees.estimation });
         }
 
         function afficherResultat(estimation) {
             etape = "fin";
+            majProgression();
             const bloc = elt("div", "resultat");
-            bloc.appendChild(elt("p", "resultat__etiquette", "Estimation de votre bien"));
+            bloc.appendChild(elt("p", "resultat__etiquette", "Voici l'estimation de votre bien"));
             // Montant tel que renvoyé par /estimate, simplement mis en forme
             bloc.appendChild(elt("p", "resultat__montant", Number(estimation).toLocaleString("fr-FR") + " €"));
             bulle("assistant", bloc);
-            bulle("assistant", "Accompagnement expert, en option : un rendez-vous pour préparer la négociation. Cet accompagnement n'est facturé que si la vente aboutit, selon le bien et le contrat.");
-            activerSaisie(false, "Estimation terminée");
+            etape = "conversion";
+            majProgression();
         }
 
         // ---------- Entrées du client ----------
@@ -603,25 +871,124 @@
             if (!texte.trim()) return;
             saisie.value = "";
             ajusterHauteur();
+            majBoutonEnvoi();
             traiterMessage(texte);
         }
 
         function ajusterHauteur() {
             saisie.style.height = "auto";
-            saisie.style.height = Math.min(saisie.scrollHeight, 160) + "px";
+            const hauteur = Math.min(saisie.scrollHeight, 140);
+            saisie.style.height = hauteur + "px";
+            compositeur.classList.toggle("compositeur--multi", hauteur > 52);
         }
 
-        envoi.addEventListener("click", envoyerSaisie);
-        saisie.addEventListener("input", ajusterHauteur);
+        function deplacerArobase(sens) {
+            const items = Array.from(menuArobase.querySelectorAll(".arobase__item"));
+            if (!items.length) return;
+            const index = items.findIndex(function (el) { return el.classList.contains("is-actif"); });
+            const suivant = sens === "bas"
+                ? (index + 1) % items.length
+                : (index - 1 + items.length) % items.length;
+            items.forEach(function (el) { el.classList.remove("is-actif"); });
+            items[suivant].classList.add("is-actif");
+            items[suivant].scrollIntoView({ block: "nearest" });
+        }
+
+        compositeur.addEventListener("submit", function (event) {
+            event.preventDefault();
+            envoyerSaisie();
+        });
+        saisie.addEventListener("input", function () {
+            ajusterHauteur();
+            majBoutonEnvoi();
+            majArobase();
+        });
         saisie.addEventListener("keydown", function (event) {
+            if (!menuArobase.hidden) {
+                if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    deplacerArobase(event.key === "ArrowDown" ? "bas" : "haut");
+                    return;
+                }
+                if (event.key === "Enter" && !event.shiftKey) {
+                    const actif = menuArobase.querySelector(".arobase__item.is-actif");
+                    if (actif) {
+                        event.preventDefault();
+                        actif.click();
+                        return;
+                    }
+                }
+                if (event.key === "Escape") {
+                    event.preventDefault();
+                    menuArobase.hidden = true;
+                    return;
+                }
+            }
+            if (event.key === "Escape") {
+                fermerMenus();
+                return;
+            }
             if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault();
                 envoyerSaisie();
             }
         });
 
-        accueil();
-        activerSaisie(true, "Décrivez votre bien avec vos mots…");
+        modeBtn.addEventListener("click", function () { basculerMenu(menuMode, modeBtn); });
+        document.addEventListener("click", function (event) {
+            if (!dock.contains(event.target)) fermerMenus();
+        });
+
+        const Reco = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const reco = Reco ? new Reco() : null;
+        if (reco) {
+            reco.lang = "fr-FR";
+            reco.interimResults = true;
+            reco.continuous = false;
+            reco.onresult = function (event) {
+                let dit = "";
+                for (let i = event.resultIndex; i < event.results.length; i += 1) {
+                    dit += event.results[i][0].transcript;
+                }
+                saisie.value = (baseDictee ? baseDictee + " " : "") + dit;
+                ajusterHauteur();
+                majBoutonEnvoi();
+            };
+            reco.onerror = function () {
+                ecoute = false;
+                micro.classList.remove("is-ecoute");
+                micro.setAttribute("aria-pressed", "false");
+                direDictée("La dictée n'a pas pu démarrer.");
+            };
+            reco.onend = function () {
+                ecoute = false;
+                micro.classList.remove("is-ecoute");
+                micro.setAttribute("aria-pressed", "false");
+            };
+        }
+        micro.addEventListener("click", function () {
+            if (saisie.disabled) return;
+            if (!reco) {
+                direDictée("La dictée n'est pas disponible dans ce navigateur.");
+                return;
+            }
+            if (ecoute) {
+                reco.stop();
+                return;
+            }
+            baseDictee = saisie.value.trim();
+            try {
+                reco.start();
+                ecoute = true;
+                micro.classList.add("is-ecoute");
+                micro.setAttribute("aria-pressed", "true");
+            } catch (e) {
+                direDictée("La dictée n'a pas pu démarrer.");
+            }
+        });
+
+        majBoutonEnvoi();
+        saisie.focus();
     </script>
 </body>
 </html>

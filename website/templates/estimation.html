@@ -23,120 +23,21 @@
     </header>
 
     <main>
-        <section class="page-titre">
+        <section class="page-titre page-titre--compact">
             <div class="cadre">
                 <h1>Estimez votre bien</h1>
-                <p>L'estimation coûte {{ prix }} € TTC. Décrivez le bien tel qu'il est : le séjour compte dans les pièces.</p>
+                <p>L'estimation coûte {{ prix }} € TTC. Décrivez le bien avec vos mots, je m'occupe du reste.</p>
             </div>
         </section>
 
-        <section class="cadre estimation-layout">
-            <form class="carte estimation__form" id="estimationForm" autocomplete="off">
-                <h2 class="form__bloc form__pleine">Le bien</h2>
-                <div class="form__groupe">
-                    <label for="type_bien">Type de bien</label>
-                    <select id="type_bien" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="appartement">Appartement</option>
-                        <option value="maison">Maison</option>
-                    </select>
+        <section class="cadre cadre--large chat-layout">
+            <div class="chat carte" id="chat">
+                <div class="chat__fil" id="fil" role="log" aria-live="polite" aria-label="Conversation"></div>
+                <div class="chat__saisie">
+                    <textarea id="saisie" rows="1" placeholder="Décrivez votre bien ou répondez ici…" aria-label="Votre message"></textarea>
+                    <button type="button" class="bouton chat__envoi" id="envoi">Envoyer <span class="fleche" aria-hidden="true"></span></button>
                 </div>
-                <div class="form__groupe">
-                    <label for="ville">Ville</label>
-                    <select id="ville" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="Paris">Paris</option>
-                        <option value="Lyon">Lyon</option>
-                        <option value="Bordeaux">Bordeaux</option>
-                        <option value="Rennes">Rennes</option>
-                        <option value="Strasbourg">Strasbourg</option>
-                        <option value="Lille">Lille</option>
-                        <option value="Marseille">Marseille</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label for="surface">Surface (m²)</label>
-                    <input type="number" id="surface" required min="15" max="250" step="0.1">
-                </div>
-                <div class="form__groupe">
-                    <label for="distance_centre">Distance au centre (km)</label>
-                    <input type="number" id="distance_centre" required min="0" max="30" step="0.1">
-                </div>
-
-                <h2 class="form__bloc form__pleine">La distribution</h2>
-                <div class="form__groupe">
-                    <label for="nb_pieces">Nombre de pièces</label>
-                    <input type="number" id="nb_pieces" required min="1" max="12" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="nb_chambres">Nombre de chambres</label>
-                    <input type="number" id="nb_chambres" required min="1" max="10" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="nb_salles_de_bain">Salles de bain</label>
-                    <input type="number" id="nb_salles_de_bain" required min="1" max="5" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="etage">Étage</label>
-                    <input type="number" id="etage" required min="0" max="20" step="1" value="0">
-                </div>
-
-                <h2 class="form__bloc form__pleine">L'état du logement</h2>
-                <div class="form__groupe">
-                    <label for="annee_construction">Année de construction</label>
-                    <input type="number" id="annee_construction" required min="1900" max="2025" step="1">
-                </div>
-                <div class="form__groupe">
-                    <label for="etat">État</label>
-                    <select id="etat" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="mauvais">Mauvais</option>
-                        <option value="moyen">Moyen</option>
-                        <option value="bon">Bon</option>
-                        <option value="excellent">Excellent</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label for="dpe">Classe DPE</label>
-                    <select id="dpe" required>
-                        <option value="">Sélectionnez</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="G">G</option>
-                    </select>
-                </div>
-                <div class="form__groupe">
-                    <label id="labelEquipements">Équipements</label>
-                    <div class="liste" id="equipementsListe">
-                        <button type="button" class="liste__face" id="equipementsFace">Aucun équipement</button>
-                        <ul class="liste__menu" hidden>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="garage"> Garage</label></li>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="ascenseur"> Ascenseur</label></li>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="balcon_terrasse"> Balcon ou terrasse</label></li>
-                            <li><label class="liste__option liste__coche"><input type="checkbox" id="cave"> Cave</label></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <button type="submit" class="bouton estimation__submit" id="bouton">Passer au paiement <span class="fleche" aria-hidden="true"></span></button>
-                <div id="paiement" class="paiement form__pleine" hidden>
-                    <p class="paiement__titre">Régler cette estimation</p>
-                    <p class="paiement__montant">{{ prix }} € TTC</p>
-                    <p>Le calcul démarre après le règlement. Paiement simulé : aucun prélèvement réel.</p>
-                    <button type="button" class="bouton" id="confirmerPaiement">Payer et estimer <span class="fleche" aria-hidden="true"></span></button>
-                </div>
-                <div id="suivi" class="pensee form__pleine" hidden>
-                    <p class="pensee__titre">Notre petit robot estime votre bien…</p>
-                    <div id="penseeFil" class="pensee__fil"></div>
-                </div>
-                <p id="resultat" class="resultat form__pleine" hidden></p>
-                <p id="suite" class="suite form__pleine" hidden>Accompagnement expert, en option : un rendez-vous pour préparer la négociation. Cet accompagnement n'est facturé que si la vente aboutit, selon le bien et le contrat.</p>
-                <p id="erreur" class="erreur form__pleine" hidden></p>
-            </form>
+            </div>
         </section>
     </main>
 
@@ -148,233 +49,579 @@
     </footer>
 
     <script>
-        const form = document.getElementById("estimationForm");
-        const resultat = document.getElementById("resultat");
-        const suite = document.getElementById("suite");
-        const erreur = document.getElementById("erreur");
-        const bouton = document.getElementById("bouton");
-        const paiement = document.getElementById("paiement");
-        const confirmerPaiement = document.getElementById("confirmerPaiement");
-        const suivi = document.getElementById("suivi");
-        const penseeFil = document.getElementById("penseeFil");
-        const equipementsFace = document.getElementById("equipementsFace");
-        const equipementsListe = document.getElementById("equipementsListe");
+        // Tarif du service (pas le prix du bien), fourni par le serveur
+        const TARIF = "{{ prix }}";
 
-        function ouiNon(id) {
-            return document.getElementById(id).checked ? "oui" : "non";
+        // Les 15 caractéristiques, dans l'ordre de data/house_pred.csv. Ni plus, ni moins.
+        const CHAMPS = [
+            { cle: "surface", libelle: "Surface", aide: "de 15 à 250 m²", question: "Quelle est la surface du bien, en m² ?" },
+            { cle: "type_bien", libelle: "Type de bien", aide: "appartement ou maison", question: "S'agit-il d'un appartement ou d'une maison ?" },
+            { cle: "nb_pieces", libelle: "Pièces", aide: "séjour compris, de 1 à 12", question: "Combien de pièces compte le bien, séjour compris ?" },
+            { cle: "nb_chambres", libelle: "Chambres", aide: "de 1 à 10", question: "Combien de chambres compte le bien ?" },
+            { cle: "nb_salles_de_bain", libelle: "Salles de bain", aide: "de 1 à 5", question: "Combien de salles de bain compte le bien ?" },
+            { cle: "etage", libelle: "Étage", aide: "0 pour un rez-de-chaussée, jusqu'à 20", question: "À quel étage se situe le bien ? (0 pour un rez-de-chaussée)" },
+            { cle: "annee_construction", libelle: "Année de construction", aide: "de 1900 à 2025", question: "En quelle année le bien a-t-il été construit ?" },
+            { cle: "ville", libelle: "Ville", aide: "Paris, Lyon, Lille, Marseille, Rennes, Bordeaux ou Strasbourg", question: "Dans quelle ville se situe le bien ?" },
+            { cle: "etat", libelle: "État", aide: "mauvais, moyen, bon ou excellent", question: "Quel est l'état général du bien ?" },
+            { cle: "dpe", libelle: "DPE", aide: "une lettre de A à G", question: "Quelle est la classe DPE du bien ?" },
+            { cle: "garage", libelle: "Garage", aide: "oui ou non", question: "Le bien dispose-t-il d'un garage ?" },
+            { cle: "ascenseur", libelle: "Ascenseur", aide: "oui ou non", question: "Y a-t-il un ascenseur ?" },
+            { cle: "balcon_terrasse", libelle: "Balcon ou terrasse", aide: "oui ou non", question: "Le bien a-t-il un balcon ou une terrasse ?" },
+            { cle: "cave", libelle: "Cave", aide: "oui ou non", question: "Le bien dispose-t-il d'une cave ?" },
+            { cle: "distance_centre", libelle: "Distance au centre", aide: "en km, de 0 à 30", question: "À quelle distance du centre-ville se trouve le bien ? (en km, ou en mètres si c'est moins d'un kilomètre)" },
+        ];
+        const PAR_CLE = Object.fromEntries(CHAMPS.map(function (c) { return [c.cle, c]; }));
+
+        // Regroupement d'affichage du message d'accueil
+        const GROUPES = [
+            { titre: "Le bien", cles: ["type_bien", "ville", "surface", "distance_centre"] },
+            { titre: "La distribution", cles: ["nb_pieces", "nb_chambres", "nb_salles_de_bain", "etage"] },
+            { titre: "L'état du logement", cles: ["annee_construction", "etat", "dpe"] },
+            { titre: "Les équipements", cles: ["garage", "ascenseur", "balcon_terrasse", "cave"] },
+        ];
+
+        const VILLES = ["Paris", "Lyon", "Lille", "Marseille", "Rennes", "Bordeaux", "Strasbourg"];
+        const ETATS = ["mauvais", "moyen", "bon", "excellent"];
+        const DPE = ["A", "B", "C", "D", "E", "F", "G"];
+
+        // Bornes de saisie (mêmes plages que valider()), pour relancer tout de suite le client
+        const BORNES = {
+            surface: [15, 250, false, "La surface doit être comprise entre 15 et 250 m²."],
+            nb_pieces: [1, 12, true, "Le nombre de pièces doit être compris entre 1 et 12."],
+            nb_chambres: [1, 10, true, "Le nombre de chambres doit être compris entre 1 et 10."],
+            nb_salles_de_bain: [1, 5, true, "Le nombre de salles de bain doit être compris entre 1 et 5."],
+            etage: [0, 20, true, "L'étage doit être compris entre 0 et 20."],
+            annee_construction: [1900, 2025, true, "L'année de construction doit être comprise entre 1900 et 2025."],
+            distance_centre: [0, 30, false, "La distance au centre doit être comprise entre 0 et 30 km."],
+        };
+
+        const MOTS_NOMBRES = { un: 1, une: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, huit: 8, neuf: 9, dix: 10 };
+        const NOMBRE = "(\\d+|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)";
+
+        // La fiche : une information non dite reste null
+        const fiche = {};
+        CHAMPS.forEach(function (c) { fiche[c.cle] = null; });
+
+        let etape = "decrire"; // decrire, collecte, confirmation, paiement, calcul, fin
+        let cleDemandee = null;
+
+        const fil = document.getElementById("fil");
+        const saisie = document.getElementById("saisie");
+        const envoi = document.getElementById("envoi");
+
+        // ---------- Utilitaires de texte ----------
+
+        // Minuscules sans accents, pour comparer sans se soucier de la saisie
+        function normaliser(texte) {
+            return texte
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[̀-ͯ]/g, "")
+                .replace(/[’`]/g, "'");
         }
 
-        function fermerListes() {
-            document.querySelectorAll(".liste").forEach(function (liste) {
-                liste.classList.remove("liste--ouvert");
-                liste.querySelector(".liste__menu").hidden = true;
-            });
+        function versNombre(brut) {
+            const mot = brut.toLowerCase();
+            if (MOTS_NOMBRES[mot] !== undefined) return MOTS_NOMBRES[mot];
+            return parseFloat(brut.replace(",", "."));
         }
 
-        document.querySelectorAll("select").forEach(function (select) {
-            const enveloppe = document.createElement("div");
-            enveloppe.className = "liste";
-            select.parentNode.insertBefore(enveloppe, select);
-            enveloppe.appendChild(select);
-            select.classList.add("liste__source");
-
-            const face = document.createElement("button");
-            face.type = "button";
-            face.className = "liste__face";
-            face.textContent = "Sélectionnez";
-
-            const menu = document.createElement("ul");
-            menu.className = "liste__menu";
-            menu.hidden = true;
-
-            Array.from(select.options).forEach(function (option) {
-                if (!option.value) return;
-                const ligne = document.createElement("li");
-                const choix = document.createElement("button");
-                choix.type = "button";
-                choix.className = "liste__option";
-                choix.textContent = option.text;
-                choix.addEventListener("click", function () {
-                    select.value = option.value;
-                    face.textContent = option.text;
-                    enveloppe.classList.remove("liste--erreur");
-                    menu.querySelectorAll(".liste__option").forEach(function (el) {
-                        el.classList.toggle("liste__option--choisi", el === choix);
-                    });
-                    fermerListes();
-                });
-                ligne.appendChild(choix);
-                menu.appendChild(ligne);
-            });
-
-            face.addEventListener("click", function () {
-                const etaitOuvert = enveloppe.classList.contains("liste--ouvert");
-                fermerListes();
-                if (!etaitOuvert) {
-                    menu.hidden = false;
-                    enveloppe.classList.add("liste--ouvert");
-                }
-            });
-
-            enveloppe.appendChild(face);
-            enveloppe.appendChild(menu);
-        });
-
-        equipementsFace.addEventListener("click", function () {
-            const menu = equipementsListe.querySelector(".liste__menu");
-            const etaitOuvert = equipementsListe.classList.contains("liste--ouvert");
-            fermerListes();
-            if (!etaitOuvert) {
-                menu.hidden = false;
-                equipementsListe.classList.add("liste--ouvert");
-            }
-        });
-
-        function majEquipements() {
-            const coches = [];
-            if (document.getElementById("garage").checked) coches.push("Garage");
-            if (document.getElementById("ascenseur").checked) coches.push("Ascenseur");
-            if (document.getElementById("balcon_terrasse").checked) coches.push("Balcon ou terrasse");
-            if (document.getElementById("cave").checked) coches.push("Cave");
-            equipementsFace.textContent = coches.length ? coches.join(", ") : "Aucun équipement";
-        }
-
-        equipementsListe.querySelectorAll("input").forEach(function (caseACocher) {
-            caseACocher.addEventListener("change", majEquipements);
-        });
-
-        document.addEventListener("click", function (event) {
-            if (!event.target.closest(".liste")) fermerListes();
-        });
-
-        function attendre(ms) {
-            return new Promise(function (resolve) {
-                setTimeout(resolve, ms);
-            });
-        }
-
-        async function ecrireLigne(texte) {
-            const ligne = document.createElement("p");
-            ligne.className = "pensee__ligne";
-            penseeFil.appendChild(ligne);
-            for (let i = 0; i < texte.length; i += 1) {
-                ligne.textContent += texte[i];
-                await attendre(26);
-            }
-            await attendre(320);
-        }
-
-        async function jouerPhases() {
-            const ville = document.getElementById("ville").value;
-            const phrases = [
-                "Je récupère les informations du formulaire.",
-                "Je cherche des biens comparables à " + ville + ".",
-                "Je pars du prix au mètre carré, puis de la surface.",
-                "J'ajuste avec l'état, le DPE et les équipements.",
-                "Je prépare le montant."
-            ];
-            penseeFil.textContent = "";
-            suivi.hidden = false;
-            for (let i = 0; i < phrases.length; i += 1) {
-                await ecrireLigne(phrases[i]);
-            }
-        }
-
-        function formulairePret() {
-            fermerListes();
-            let valide = true;
-            document.querySelectorAll("select").forEach(function (select) {
-                const enveloppe = select.closest(".liste");
-                const vide = !select.value;
-                enveloppe.classList.toggle("liste--erreur", vide);
-                if (vide) valide = false;
-            });
-            if (!valide || !form.checkValidity()) {
-                form.reportValidity();
-                return false;
-            }
+        function dansBornes(cle, valeur) {
+            const b = BORNES[cle];
+            if (Number.isNaN(valeur)) return false;
+            if (valeur < b[0] || valeur > b[1]) return false;
+            if (b[2] && !Number.isInteger(valeur)) return false;
             return true;
         }
 
-        function lireDonnees() {
-            return {
-                surface: Number(document.getElementById("surface").value),
-                type_bien: document.getElementById("type_bien").value,
-                nb_pieces: Number(document.getElementById("nb_pieces").value),
-                nb_chambres: Number(document.getElementById("nb_chambres").value),
-                nb_salles_de_bain: Number(document.getElementById("nb_salles_de_bain").value),
-                etage: Number(document.getElementById("etage").value),
-                annee_construction: Number(document.getElementById("annee_construction").value),
-                ville: document.getElementById("ville").value,
-                etat: document.getElementById("etat").value,
-                dpe: document.getElementById("dpe").value,
-                garage: ouiNon("garage"),
-                ascenseur: ouiNon("ascenseur"),
-                balcon_terrasse: ouiNon("balcon_terrasse"),
-                cave: ouiNon("cave"),
-                distance_centre: Number(document.getElementById("distance_centre").value),
-                paiement: true,
-            };
+        // ---------- Extraction depuis une description libre ----------
+        // Chaque extracteur renvoie une valeur ou undefined. Rien n'est jamais deviné.
+
+        function extraire(brut) {
+            const t = normaliser(brut);
+            const trouve = {};
+
+            // Surface : « 53,1 m² », « 53 m2 », « 53 mètres carrés »
+            let m = t.match(/(\d+(?:[.,]\d+)?)\s*(?:m²|m2|metres?\s+carres?)/);
+            if (m) trouve.surface = parseFloat(m[1].replace(",", "."));
+
+            // Type : T1, T2, T3… sont des appartements, le nombre est le nombre de pièces
+            m = t.match(/\bt\s?(\d{1,2})\b/);
+            if (m) {
+                trouve.type_bien = "appartement";
+                trouve.nb_pieces = parseInt(m[1], 10);
+            }
+            if (/\b(appartement|appart)\b/.test(t)) trouve.type_bien = "appartement";
+            if (/\b(maison|pavillon|villa)\b/.test(t)) trouve.type_bien = "maison";
+
+            m = t.match(new RegExp("\\b" + NOMBRE + "\\s*pieces?\\b"));
+            if (m) trouve.nb_pieces = versNombre(m[1]);
+
+            // Chambres : jamais déduites du nombre de pièces
+            m = t.match(new RegExp("\\b" + NOMBRE + "\\s*chambres?\\b"));
+            if (m) trouve.nb_chambres = versNombre(m[1]);
+
+            m = t.match(new RegExp("\\b" + NOMBRE + "\\s*salles?\\s+de\\s+bains?\\b"));
+            if (m) trouve.nb_salles_de_bain = versNombre(m[1]);
+
+            // Étage : « au 6e », « 6ème étage », « rez-de-chaussée »
+            if (/rez[- ]de[- ]chaussee|\brdc\b/.test(t)) {
+                trouve.etage = 0;
+            } else {
+                m = t.match(/\bau\s+(\d{1,2})\s*(?:e|eme|er|ere)\b/) ||
+                    t.match(/\b(\d{1,2})\s*(?:e|eme|er|ere)?\s+etage\b/) ||
+                    t.match(/\betage\s*(\d{1,2})\b/);
+                if (m) trouve.etage = parseInt(m[1], 10);
+            }
+
+            // Année : seulement si le texte parle de construction
+            m = t.match(/(?:construit|construite|batie?|datant|date|annee(?:\s+de\s+construction)?)\D{0,20}?\b(19\d{2}|20[0-2]\d)\b/);
+            if (m) trouve.annee_construction = parseInt(m[1], 10);
+
+            VILLES.forEach(function (ville) {
+                if (new RegExp("\\b" + normaliser(ville) + "\\b").test(t)) trouve.ville = ville;
+            });
+
+            m = t.match(/\betat\s+(?:general\s+)?(mauvais|moyen|bon|excellent)\b/) ||
+                t.match(/\b(mauvais|moyen|bon|excellent)\s+etat\b/);
+            if (m) trouve.etat = m[1];
+
+            m = t.match(/\bdpe\s*(?:de\s+|classe\s+|en\s+)?:?\s*([a-g])\b/) ||
+                t.match(/\bclasse\s+(?:energie\s+|energetique\s+)?([a-g])\b/);
+            if (m) trouve.dpe = m[1].toUpperCase();
+
+            // Équipements : « sans », « pas de », « aucun », « ni » donnent non ; une simple mention donne oui
+            Object.assign(trouve, extraireEquipements(t));
+
+            // Distance : « 3,9 km du centre », « 500 m du centre »
+            m = t.match(/(\d+(?:[.,]\d+)?)\s*(km|kilometres?|metres?|m)\b\s*(?:du|de|d')?\s*(?:centre|centre-ville)/);
+            if (m) {
+                const nombre = parseFloat(m[1].replace(",", "."));
+                trouve.distance_centre = m[2] === "km" || m[2].startsWith("kilo") ? nombre : nombre / 1000;
+            }
+
+            return trouve;
         }
 
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-            if (!formulairePret()) return;
-            resultat.hidden = true;
-            suite.hidden = true;
-            erreur.hidden = true;
-            suivi.hidden = true;
-            paiement.hidden = false;
-        });
+        const EQUIPEMENTS = {
+            garage: /\bgarages?\b/,
+            ascenseur: /\bascenseurs?\b/,
+            balcon_terrasse: /\b(balcons?|terrasses?)\b/,
+            cave: /\bcaves?\b/,
+        };
 
-        confirmerPaiement.addEventListener("click", async function () {
-            if (!formulairePret()) {
-                paiement.hidden = true;
+        function extraireEquipements(t) {
+            const trouve = {};
+            // On découpe en propositions, puis on regarde ce qui précède chaque mot
+            t.split(/[.;!?\n]|,/).forEach(function (proposition) {
+                Object.keys(EQUIPEMENTS).forEach(function (cle) {
+                    const m = proposition.match(EQUIPEMENTS[cle]);
+                    if (!m) return;
+                    // Seul ce qui suit le dernier « avec / mais / et » compte pour ce mot
+                    const avant = proposition.slice(0, m.index).split(/\b(?:avec|mais|et)\b/).pop();
+                    trouve[cle] = /\b(sans|pas|aucun|aucune|ni|non)\b/.test(avant) ? "non" : "oui";
+                });
+            });
+            return trouve;
+        }
+
+        // ---------- Lecture d'une réponse à une question précise ----------
+
+        // Renvoie { valeur } ou { erreur } ou null si rien de compris
+        function lireReponse(cle, brut) {
+            const t = normaliser(brut).trim();
+            if (!t) return null;
+
+            if (BORNES[cle]) {
+                let valeur;
+                if (cle === "etage" && /rez[- ]de[- ]chaussee|\brdc\b/.test(t)) {
+                    valeur = 0;
+                } else if (cle === "distance_centre") {
+                    const m = t.match(/(\d+(?:[.,]\d+)?)\s*(km|kilometres?|metres?|m)?\b/);
+                    if (!m) return null;
+                    valeur = parseFloat(m[1].replace(",", "."));
+                    if (m[2] && !m[2].startsWith("k")) valeur = valeur / 1000;
+                } else {
+                    const m = t.match(new RegExp("\\b(\\d+(?:[.,]\\d+)?|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)\\b"));
+                    if (!m) return null;
+                    valeur = versNombre(m[1]);
+                }
+                if (!dansBornes(cle, valeur)) return { erreur: BORNES[cle][3] };
+                return { valeur: valeur };
+            }
+
+            if (cle === "type_bien") {
+                if (/\b(maison|pavillon|villa)\b/.test(t)) return { valeur: "maison" };
+                if (/\b(appartement|appart)\b/.test(t)) return { valeur: "appartement" };
+                return null;
+            }
+            if (cle === "ville") {
+                const ville = VILLES.find(function (v) { return new RegExp("\\b" + normaliser(v) + "\\b").test(t); });
+                return ville ? { valeur: ville } : { erreur: "Cette ville n'est pas dans la liste : " + VILLES.join(", ") + "." };
+            }
+            if (cle === "etat") {
+                const etat = ETATS.find(function (e) { return new RegExp("\\b" + e + "\\b").test(t); });
+                return etat ? { valeur: etat } : null;
+            }
+            if (cle === "dpe") {
+                const m = t.match(/^(?:dpe\s*|classe\s*)?([a-g])$/) || t.match(/\b(?:dpe|classe)\s*:?\s*([a-g])\b/);
+                return m ? { valeur: m[1].toUpperCase() } : null;
+            }
+            // Équipements
+            if (/^(non|no)\b|\b(sans|pas|aucun|aucune)\b/.test(t)) return { valeur: "non" };
+            if (/^(oui|ouais|yes)\b|\b(avec|il y a|j'en ai|possede|dispose)\b/.test(t)) return { valeur: "oui" };
+            return null;
+        }
+
+        // ---------- Mise à jour de la fiche ----------
+
+        // Remplit uniquement les champs encore à null. Renvoie les clés renseignées.
+        function appliquer(trouve) {
+            const remplis = [];
+            Object.keys(trouve).forEach(function (cle) {
+                if (fiche[cle] !== null || !(cle in fiche)) return;
+                if (BORNES[cle] && !dansBornes(cle, trouve[cle])) return;
+                fiche[cle] = trouve[cle];
+                remplis.push(cle);
+            });
+            appliquerConventions();
+            return remplis;
+        }
+
+        // Seule convention hors phrase : une maison est à l'étage 0, sans ascenseur
+        function appliquerConventions() {
+            if (fiche.type_bien === "maison") {
+                if (fiche.etage === null) fiche.etage = 0;
+                if (fiche.ascenseur === null) fiche.ascenseur = "non";
+            }
+        }
+
+        function champsManquants() {
+            return CHAMPS.filter(function (c) { return fiche[c.cle] === null; });
+        }
+
+        // ---------- Affichage du fil ----------
+
+        function defiler() {
+            fil.scrollTop = fil.scrollHeight;
+        }
+
+        function bulle(role, contenu) {
+            const ligne = document.createElement("div");
+            ligne.className = "msg msg--" + role;
+            if (role === "assistant") {
+                const avatar = document.createElement("span");
+                avatar.className = "msg__avatar";
+                avatar.setAttribute("aria-hidden", "true");
+                avatar.textContent = "r";
+                ligne.appendChild(avatar);
+            }
+            const corps = document.createElement("div");
+            corps.className = "msg__bulle";
+            if (typeof contenu === "string") {
+                corps.textContent = contenu;
+            } else {
+                corps.appendChild(contenu);
+            }
+            ligne.appendChild(corps);
+            fil.appendChild(ligne);
+            defiler();
+            return corps;
+        }
+
+        function elt(balise, classe, texte) {
+            const e = document.createElement(balise);
+            if (classe) e.className = classe;
+            if (texte !== undefined) e.textContent = texte;
+            return e;
+        }
+
+        function retirerChoix() {
+            fil.querySelectorAll(".choix").forEach(function (c) { c.remove(); });
+        }
+
+        // Boutons de réponse rapide : valeur envoyée comme si le client l'avait écrite
+        function proposer(options, action) {
+            retirerChoix();
+            const zone = elt("div", "choix");
+            options.forEach(function (option) {
+                const bouton = elt("button", "choix__bouton", option.libelle);
+                bouton.type = "button";
+                bouton.addEventListener("click", function () {
+                    retirerChoix();
+                    bulle("user", option.libelle);
+                    action(option);
+                });
+                zone.appendChild(bouton);
+            });
+            fil.appendChild(zone);
+            defiler();
+        }
+
+        function frappe(actif) {
+            let indicateur = document.getElementById("frappe");
+            if (actif && !indicateur) {
+                indicateur = elt("div", "msg msg--assistant");
+                indicateur.id = "frappe";
+                indicateur.appendChild(elt("span", "msg__avatar", "r"));
+                const corps = elt("div", "msg__bulle frappe");
+                corps.setAttribute("aria-label", "Redfile écrit");
+                for (let i = 0; i < 3; i += 1) corps.appendChild(elt("span", "frappe__point"));
+                indicateur.appendChild(corps);
+                fil.appendChild(indicateur);
+                defiler();
+            } else if (!actif && indicateur) {
+                indicateur.remove();
+            }
+        }
+
+        function activerSaisie(actif, indice) {
+            saisie.disabled = !actif;
+            envoi.disabled = !actif;
+            if (indice) saisie.placeholder = indice;
+            if (actif) saisie.focus();
+        }
+
+        // ---------- Message d'accueil ----------
+
+        function accueil() {
+            const bloc = elt("div", "accueil");
+            bloc.appendChild(elt("p", "accueil__titre", "Bonjour, je suis l'assistant redfile."));
+            bloc.appendChild(elt("p", null, "Pour estimer votre bien, j'ai besoin de 15 informations, pas une de plus. Décrivez-le avec vos mots : je repère ce que vous me dites et je vous pose une question pour chaque information manquante."));
+            const grille = elt("div", "accueil__grille");
+            GROUPES.forEach(function (groupe) {
+                const carte = elt("div", "accueil__groupe");
+                carte.appendChild(elt("p", "accueil__groupe-titre", groupe.titre));
+                const liste = elt("ul", "accueil__liste");
+                groupe.cles.forEach(function (cle) {
+                    const li = elt("li");
+                    li.appendChild(elt("strong", null, PAR_CLE[cle].libelle));
+                    li.appendChild(elt("span", null, PAR_CLE[cle].aide));
+                    liste.appendChild(li);
+                });
+                carte.appendChild(liste);
+                grille.appendChild(carte);
+            });
+            bloc.appendChild(grille);
+            bloc.appendChild(elt("p", "accueil__pied", "Ce que vous ne précisez pas, je vous le demande : je ne devine rien. Vous voyez le montant de l'estimation une fois la fiche confirmée et réglée (" + TARIF + " € TTC)."));
+            bulle("assistant", bloc);
+        }
+
+        // ---------- Boucle de conversation ----------
+
+        function poserQuestionSuivante() {
+            const manquants = champsManquants();
+            if (manquants.length === 0) {
+                cleDemandee = null;
+                afficherResume();
+                return;
+            }
+            etape = "collecte";
+            const champ = manquants[0];
+            cleDemandee = champ.cle;
+            bulle("assistant", champ.question);
+            activerSaisie(true, "Votre réponse…");
+            if (champ.cle === "type_bien") {
+                proposer([{ libelle: "Appartement", valeur: "appartement" }, { libelle: "Maison", valeur: "maison" }], function (o) { repondre(champ.cle, o.valeur); });
+            } else if (champ.cle === "ville") {
+                proposer(VILLES.map(function (v) { return { libelle: v, valeur: v }; }), function (o) { repondre(champ.cle, o.valeur); });
+            } else if (champ.cle === "etat") {
+                proposer(ETATS.map(function (e) { return { libelle: e.charAt(0).toUpperCase() + e.slice(1), valeur: e }; }), function (o) { repondre(champ.cle, o.valeur); });
+            } else if (champ.cle === "dpe") {
+                proposer(DPE.map(function (d) { return { libelle: d, valeur: d }; }), function (o) { repondre(champ.cle, o.valeur); });
+            } else if (["garage", "ascenseur", "balcon_terrasse", "cave"].indexOf(champ.cle) !== -1) {
+                proposer([{ libelle: "Oui", valeur: "oui" }, { libelle: "Non", valeur: "non" }], function (o) { repondre(champ.cle, o.valeur); });
+            }
+        }
+
+        // Une réponse déjà normalisée (bouton) est enregistrée telle quelle
+        function repondre(cle, valeur) {
+            fiche[cle] = valeur;
+            appliquerConventions();
+            poserQuestionSuivante();
+        }
+
+        function resumerCompris(remplis) {
+            const noms = remplis.map(function (cle) { return PAR_CLE[cle].libelle.toLowerCase(); });
+            return "J'ai bien noté : " + noms.join(", ") + ".";
+        }
+
+        function traiterMessage(texte) {
+            const brut = texte.trim();
+            if (!brut) return;
+            retirerChoix();
+            bulle("user", brut);
+
+            if (etape === "decrire") {
+                const remplis = appliquer(extraire(brut));
+                if (remplis.length === 0) {
+                    bulle("assistant", "Je n'ai pas repéré d'information exploitable. Pouvez-vous décrire votre bien : type, surface, ville, étage… ? Sinon, je vous poserai les questions une à une.");
+                    etape = "collecte";
+                    poserQuestionSuivante();
+                    return;
+                }
+                bulle("assistant", resumerCompris(remplis));
+                poserQuestionSuivante();
                 return;
             }
 
-            paiement.hidden = true;
-            resultat.hidden = true;
-            suite.hidden = true;
-            erreur.hidden = true;
-            bouton.disabled = true;
-            confirmerPaiement.disabled = true;
-
-            const donnees = lireDonnees();
-
-            const calcul = fetch("/estimate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(donnees),
-            }).then(function (reponse) {
-                return reponse.json().then(function (corps) {
-                    return { ok: reponse.ok, corps: corps };
-                });
-            });
-
-            try {
-                const attente = jouerPhases();
-                const recu = await calcul;
-                await attente;
-                suivi.hidden = true;
-                if (!recu.ok) {
-                    erreur.textContent = recu.corps.erreur || "Estimation impossible.";
-                    erreur.hidden = false;
+            if (etape === "collecte" && cleDemandee) {
+                const lu = lireReponse(cleDemandee, brut);
+                if (lu && lu.erreur) {
+                    bulle("assistant", lu.erreur);
+                    poserQuestionSuivante();
                     return;
                 }
-                const euros = Math.round(recu.corps.estimation).toLocaleString("fr-FR");
-                resultat.textContent = "Estimation : " + euros + " €";
-                resultat.hidden = false;
-                suite.hidden = false;
+                if (lu) {
+                    fiche[cleDemandee] = lu.valeur;
+                }
+                // Le client peut aussi donner d'autres informations dans sa réponse
+                const autres = appliquer(extraire(brut)).filter(function (c) { return c !== cleDemandee; });
+                if (!lu && autres.length === 0) {
+                    bulle("assistant", "Je n'ai pas compris. " + PAR_CLE[cleDemandee].libelle + " : " + PAR_CLE[cleDemandee].aide + ".");
+                    poserQuestionSuivante();
+                    return;
+                }
+                if (autres.length) bulle("assistant", resumerCompris(autres));
+                appliquerConventions();
+                poserQuestionSuivante();
+            }
+        }
+
+        // ---------- Résumé, confirmation, paiement, calcul ----------
+
+        function formater(cle, valeur) {
+            if (cle === "surface") return String(valeur).replace(".", ",") + " m²";
+            if (cle === "distance_centre") return String(valeur).replace(".", ",") + " km";
+            if (cle === "etage") return valeur === 0 ? "Rez-de-chaussée (0)" : String(valeur);
+            if (typeof valeur === "string") return valeur.charAt(0).toUpperCase() + valeur.slice(1);
+            return String(valeur);
+        }
+
+        function afficherResume() {
+            etape = "confirmation";
+            activerSaisie(false, "Confirmez ou corrigez les informations ci-dessus");
+            const bloc = elt("div", "resume");
+            bloc.appendChild(elt("p", "resume__titre", "Confirmez-vous les informations suivantes ?"));
+            const grille = elt("dl", "resume__grille");
+            CHAMPS.forEach(function (c) {
+                const ligne = elt("div", "resume__ligne");
+                const dt = elt("dt");
+                dt.appendChild(elt("span", null, c.libelle));
+                dt.appendChild(elt("code", null, c.cle));
+                ligne.appendChild(dt);
+                ligne.appendChild(elt("dd", null, formater(c.cle, fiche[c.cle])));
+                grille.appendChild(ligne);
+            });
+            bloc.appendChild(grille);
+            bulle("assistant", bloc);
+            proposer([
+                { libelle: "Oui, je confirme", id: "oui" },
+                { libelle: "Je veux corriger", id: "corriger" },
+            ], function (o) {
+                if (o.id === "oui") {
+                    afficherPaiement();
+                } else {
+                    proposerCorrection();
+                }
+            });
+        }
+
+        function proposerCorrection() {
+            etape = "confirmation";
+            bulle("assistant", "Quelle information souhaitez-vous corriger ?");
+            proposer(CHAMPS.map(function (c) { return { libelle: c.libelle, cle: c.cle }; }), function (o) {
+                fiche[o.cle] = null;
+                poserQuestionSuivante();
+            });
+        }
+
+        function afficherPaiement() {
+            etape = "paiement";
+            const carte = elt("div", "paiement");
+            carte.appendChild(elt("p", "paiement__titre", "Régler l'estimation"));
+            carte.appendChild(elt("p", "paiement__montant", TARIF + " € TTC"));
+            carte.appendChild(elt("p", null, "C'est le tarif du service, pas le prix du bien. Le calcul démarre après le règlement. Paiement simulé : aucun prélèvement réel."));
+            const bouton = elt("button", "bouton");
+            bouton.type = "button";
+            bouton.appendChild(document.createTextNode("Payer et estimer "));
+            const fleche = elt("span", "fleche");
+            fleche.setAttribute("aria-hidden", "true");
+            bouton.appendChild(fleche);
+            bouton.addEventListener("click", function () {
+                bouton.disabled = true;
+                lancerEstimation();
+            });
+            carte.appendChild(bouton);
+            bulle("assistant", carte);
+        }
+
+        async function lancerEstimation() {
+            etape = "calcul";
+            frappe(true);
+            // Les 15 champs de la fiche, plus l'indicateur de paiement exigé par la route
+            const corps = Object.assign({}, fiche, { paiement: true });
+            try {
+                const reponse = await fetch("/estimate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(corps),
+                });
+                const donnees = await reponse.json();
+                frappe(false);
+                if (!reponse.ok) {
+                    // Message de valider(), tel quel
+                    bulle("assistant", donnees.erreur || "Estimation impossible.").classList.add("msg__bulle--erreur");
+                    bulle("assistant", "Corrigeons la fiche ensemble.");
+                    proposerCorrection();
+                    return;
+                }
+                afficherResultat(donnees.estimation);
             } catch (e) {
-                suivi.hidden = true;
-                erreur.textContent = "Impossible de joindre le serveur.";
-                erreur.hidden = false;
-            } finally {
-                bouton.disabled = false;
-                confirmerPaiement.disabled = false;
+                frappe(false);
+                bulle("assistant", "Impossible de joindre le serveur. Réessayez dans un instant.").classList.add("msg__bulle--erreur");
+                afficherPaiement();
+            }
+        }
+
+        function afficherResultat(estimation) {
+            etape = "fin";
+            const bloc = elt("div", "resultat");
+            bloc.appendChild(elt("p", "resultat__etiquette", "Estimation de votre bien"));
+            // Montant tel que renvoyé par /estimate, simplement mis en forme
+            bloc.appendChild(elt("p", "resultat__montant", Number(estimation).toLocaleString("fr-FR") + " €"));
+            bulle("assistant", bloc);
+            bulle("assistant", "Accompagnement expert, en option : un rendez-vous pour préparer la négociation. Cet accompagnement n'est facturé que si la vente aboutit, selon le bien et le contrat.");
+            activerSaisie(false, "Estimation terminée");
+        }
+
+        // ---------- Entrées du client ----------
+
+        function envoyerSaisie() {
+            if (saisie.disabled) return;
+            const texte = saisie.value;
+            if (!texte.trim()) return;
+            saisie.value = "";
+            ajusterHauteur();
+            traiterMessage(texte);
+        }
+
+        function ajusterHauteur() {
+            saisie.style.height = "auto";
+            saisie.style.height = Math.min(saisie.scrollHeight, 160) + "px";
+        }
+
+        envoi.addEventListener("click", envoyerSaisie);
+        saisie.addEventListener("input", ajusterHauteur);
+        saisie.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                envoyerSaisie();
             }
         });
+
+        accueil();
+        activerSaisie(true, "Décrivez votre bien avec vos mots…");
     </script>
 </body>
 </html>

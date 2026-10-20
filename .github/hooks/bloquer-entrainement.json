@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "matcher": "bash|powershell",
+        "bash": "python .claude/hooks/bloquer_entrainement.py",
+        "powershell": "python .claude/hooks/bloquer_entrainement.py",
+        "cwd": ".",
+        "timeoutSec": 20
+      }
+    ]
+  }
+}

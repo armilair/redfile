@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": "python .github/hooks/tests_avant_arret.py",
+        "powershell": "python .github/hooks/tests_avant_arret.py",
+        "cwd": ".",
+        "timeoutSec": 120
+      }
+    ]
+  }
+}

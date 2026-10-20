@@ -1,0 +1,5 @@
+actions:
+  - outil: browser_navigate
+    cible: http://localhost:5000
+    constat: la page d'accueil répond
+    horodatage: 2026-10-12T14:30:00

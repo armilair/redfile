@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(/data/**)",
+      "Read(/model/model.joblib)",
+      "Edit(/model/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/bloquer_entrainement.py"
+            ],
+            "timeout": 20,
+            "onFailure": "block",
+            "statusMessage": "Contrôle avant entraînement"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/tests_avant_arret.py"
+            ],
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

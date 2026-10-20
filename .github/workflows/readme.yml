@@ -1,0 +1,11 @@
+name: README
+
+on:
+  pull_request:
+
+jobs:
+  faits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: python .claude/skills/maj-readme-skill/scripts/controle_readme.py

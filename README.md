@@ -21,6 +21,8 @@ Le site est sur [http://localhost:5000](http://localhost:5000). Sans `model/mode
 | `data/house_pred.csv` | biens d'entraînement, cible `prix` |
 | `data/ventes/` | ventes conclues, un fichier par semaine |
 | `redfilebot/logs/` | conversations du bot, un fichier par semaine |
+| `.claude/skills/reporting-hebdo/` | reporting hebdo du modèle, lancé par `/reporting-hebdo` |
+| `.claude/skills/revue-hebdo/` et `.github/skills/revue-hebdo/` | revue hebdo des conversations, lancée par `/revue-hebdo` |
 | `model/train_model.py` | entraîne le XGBoost, le compare à une régression linéaire, écrit `model/model.joblib` |
 | `app.py` | sert le site, vérifie la fiche (`valider`), calcule le prix (`estimer_prix`) |
 | `website/` | pages et styles. L'estimation est `website/templates/estimation.html` |

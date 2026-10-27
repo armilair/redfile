@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "hooks": {
+    "SubagentStop": [
+      {
+        "type": "command",
+        "matcher": "checker-reporting",
+        "bash": "python .claude/hooks/arret_reporting.py",
+        "powershell": "python .claude/hooks/arret_reporting.py",
+        "cwd": ".",
+        "timeoutSec": 30
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "bash": "python .claude/hooks/arret_reporting.py",
+        "powershell": "python .claude/hooks/arret_reporting.py",
+        "cwd": ".",
+        "timeoutSec": 60
+      }
+    ]
+  }
+}

@@ -3,7 +3,15 @@
     "deny": [
       "Read(/data/**)",
       "Read(/model/model.joblib)",
-      "Edit(/model/**)"
+      "Edit(/model/**)",
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/hooks/**)",
+      "Edit(/.claude/skills/reporting-hebdo/scripts/verifier_reporting.py)",
+      "Edit(/.claude/skills/revue-hebdo/scripts/verifier_revue.py)",
+      "Edit(/reporting/*/chiffres.json)",
+      "Edit(/reporting/*/controle.json)",
+      "Edit(/revue/*/chiffres.json)",
+      "Edit(/revue/*/controle.json)"
     ]
   },
   "hooks": {
@@ -24,6 +32,34 @@
         ]
       }
     ],
+    "SubagentStop": [
+      {
+        "matcher": "checker-reporting",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/arret_reporting.py"
+            ],
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "checker-revue",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/arret_revue.py"
+            ],
+            "timeout": 60
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -34,6 +70,24 @@
               "${CLAUDE_PROJECT_DIR}/.claude/hooks/tests_avant_arret.py"
             ],
             "timeout": 120
+          },
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/arret_reporting.py"
+            ],
+            "timeout": 60,
+            "statusMessage": "Contrôle du reporting"
+          },
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/arret_revue.py"
+            ],
+            "timeout": 60,
+            "statusMessage": "Contrôle de la revue"
           }
         ]
       }

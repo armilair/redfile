@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "hooks": {
+    "SubagentStop": [
+      {
+        "type": "command",
+        "bash": "python .github/hooks/arret_revue.py",
+        "powershell": "python .github/hooks/arret_revue.py",
+        "cwd": ".",
+        "timeoutSec": 30
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "bash": "python .github/hooks/arret_revue.py",
+        "powershell": "python .github/hooks/arret_revue.py",
+        "cwd": ".",
+        "timeoutSec": 60
+      }
+    ]
+  }
+}
